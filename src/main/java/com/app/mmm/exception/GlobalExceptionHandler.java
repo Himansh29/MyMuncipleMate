@@ -29,7 +29,10 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
-	public ResponseEntity<String> handleHttpMediaTypeNotAcceptableException(HttpMediaTypeNotAcceptableException ex) {
-		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(ex.getMessage());
+	public ResponseEntity<?> handleHttpMediaTypeNotAcceptableException(HttpMediaTypeNotAcceptableException exception
+			, WebRequest request) {
+		ErrorDetails details = new ErrorDetails(LocalDateTime.now(), exception.getMessage(),
+				request.getDescription(false));
+		return new ResponseEntity<>(details, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
 	}
 }
