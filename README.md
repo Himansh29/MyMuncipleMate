@@ -55,3 +55,147 @@ Ensure you have the following installed:
 
    ```bash
    git clone https://github.com/yourusername/MyMuncipleMateDummy.git
+## API Endpoints
+
+### Authentication
+
+- **Sign In**: `POST /api/auth/signin`
+  
+  - **Request Body**: `SignInDTO`
+  - **Response**: `JwtAuthResponse`
+
+- **Sign Up**: `POST /api/auth/signup`
+  
+  - **Request Body**: `RegisterDTO`
+  - **Response**: `ApiResponse`
+
+- **Forgot Password**: `POST /api/auth/forgotpassword`
+  
+  - **Request Body**: `ForgotPasswordDTO`
+  - **Response**: `ApiResponse`
+
+### Admin
+
+- **Add Role to Citizen**: `POST /api/admin/assign-role`
+  
+  - **Request Body**: `RoleAssignmentDTO`
+  - **Response**: `ApiResponse`
+
+- **Get All Complaints**: `GET /api/admin/complaints`
+  
+  - **Response**: `List<ComplainToBeSHownOnFeedDTO>`
+
+- **Get All Citizens**: `GET /api/admin/citizens`
+  
+  - **Response**: `List<CitizenSummaryDto>`
+
+- **Mark Complaint as Resolved**: `PATCH /api/admin/complaints/{complaintID}/resolved`
+  
+  - **Path Variable**: `complaintID`
+  - **Response**: `String`
+
+- **Mark Complaint as Open**: `PATCH /api/admin/complaints/{complaintID}/open`
+  
+  - **Path Variable**: `complaintID`
+  - **Response**: `String`
+
+- **Assign Team to Complaint**: `PUT /api/admin/assign-team/{complaintId}/{teamId}`
+  
+  - **Path Variables**: `complaintId`, `teamId`
+  - **Response**: `String`
+
+### Citizen
+
+- **Get Citizen By ID**: `GET /api/citizens/{id}`
+  
+  - **Path Variable**: `id`
+  - **Response**: `CitizenDto`
+
+- **Get All Complaints Registered By A Single Citizen**: `GET /api/citizens/get_all_complaints/{citizenId}`
+  
+  - **Path Variable**: `citizenId`
+  - **Response**: `List<ComplaintDTO>`
+
+- **Update Complete Citizen Details**: `PUT /api/citizens/{citizenId}`
+  
+  - **Path Variable**: `citizenId`
+  - **Request Body**: `CitizenDto`
+  - **Response**: `CitizenDto`
+
+- **Update Partial Citizen Details**: `PATCH /api/citizens/{citizenId}`
+  
+  - **Path Variable**: `citizenId`
+  - **Request Body**: `Map<String, Object>`
+  - **Response**: `CitizenDto`
+
+### Complaint
+
+- **Add Complaint By Citizen ID**: `POST /api/complaints/{citizenId}`
+  
+  - **Path Variable**: `citizenId`
+  - **Request Body**: `AddComplaintDTO`
+  - **Response**: `ApiResponse`
+
+- **Get Complaint By ID**: `GET /api/complaints/{id}`
+  
+  - **Path Variable**: `id`
+  - **Response**: `ComplaintDTO`
+
+- **Get Complaints By Status**: `GET /api/complaints/status/{status}`
+  
+  - **Path Variable**: `status`
+  - **Response**: `List<ComplaintDTO>`
+
+- **Delete Complaint By ID**: `DELETE /api/complaints/{complaintId}`
+  
+  - **Path Variable**: `complaintId`
+  - **Response**: `ApiResponse`
+
+- **Get All Complaints**: `GET /api/complaints/`
+  
+  - **Response**: `List<ComplainToBeSHownOnFeedDTO>`
+
+### Feedback
+
+- **Add Feedback**: `POST /api/feedback/{complaintId}/{citizenId}`
+  
+  - **Path Variables**: `complaintId`, `citizenId`
+  - **Request Body**: `FeedbackDTO`
+  - **Response**: `FeedbackDTO`
+
+- **Get Feedback By ID**: `GET /api/feedback/{id}`
+  
+  - **Path Variable**: `id`
+  - **Response**: `FeedbackDTO`
+
+- **Delete Feedback By ID**: `DELETE /api/feedback/{feedbackId}`
+  
+  - **Path Variable**: `feedbackId`
+  - **Response**: `ApiResponse`
+
+### Team
+
+- **Create Team**: `POST /api/teams`
+  
+  - **Request Body**: `TeamDTO`
+  - **Response**: `TeamDTO`
+
+- **Get Team By ID**: `GET /api/teams/{id}`
+  
+  - **Path Variable**: `id`
+  - **Response**: `TeamDTO`
+
+- **Get All Teams**: `GET /api/teams`
+  
+  - **Response**: `List<TeamDTO>`
+
+- **Update Team**: `PUT /api/teams/{id}`
+  
+  - **Path Variable**: `id`
+  - **Request Body**: `TeamDTO`
+  - **Response**: `TeamDTO`
+
+- **Delete Team**: `DELETE /api/teams/{id}`
+  
+  - **Path Variable**: `id`
+  - **Response**: `Void`
