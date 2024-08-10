@@ -11,4 +11,5 @@ public interface AuthenticationService {
 	ApiResponse register(RegisterDTO dto);
 	ApiResponse sendOtpForPasswordReset(String email);
     ApiResponse verifyOtpAndResetPassword(VerifyOtpDTO verifyOtpDTO);
+    String adminSignIn(SignInDTO signInDTO);
 }

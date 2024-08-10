@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.mmm.dto.ApiResponse;
 import com.app.mmm.dto.RegisterDTO;
 import com.app.mmm.dto.SignInDTO;
 import com.app.mmm.dto.VerifyOtpDTO;
@@ -52,6 +53,15 @@ public class AuthenticationController {
     @PostMapping("/verify-otp")
     public ResponseEntity<?> resetPassword(@Validated @RequestBody VerifyOtpDTO verifyOtpDTO) {
         return ResponseEntity.ok(authenticationService.verifyOtpAndResetPassword(verifyOtpDTO));
+    }
+    
+    @Operation(description = "Admin Sign in")
+    @PostMapping("/admin/signin")
+    public ResponseEntity<?> adminSignIn(@Validated @RequestBody SignInDTO signInDTO) {
+        String token = authenticationService.adminSignIn(signInDTO);
+        JwtAuthResponse authResponse = new JwtAuthResponse();
+        authResponse.setAccessToken(token);
+        return ResponseEntity.status(HttpStatus.OK).body(authResponse);
     }
 }
 

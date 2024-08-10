@@ -29,6 +29,7 @@ import com.app.mmm.exception.ResourceNotFoundException;
 import com.app.mmm.repository.CitizenRepository;
 import com.app.mmm.repository.OtpRepository;
 import com.app.mmm.repository.RoleRepository;
+import com.app.mmm.security.JwtAuthResponse;
 import com.app.mmm.security.JwtTokenProvider;
 import com.app.mmm.service.AuthenticationService;
 
@@ -150,5 +151,23 @@ public class AuthenticationServiceImple implements AuthenticationService {
         message.setText("Your OTP for password reset is: " + otp);
         mailSender.send(message);
     }
+
+	@Override
+	public String adminSignIn(SignInDTO signInDTO) {
+		Authentication authenticate = authenticationManager.authenticate(
+	            new UsernamePasswordAuthenticationToken(signInDTO.getUsernameOrEmail(), signInDTO.getPassword()));
+
+		boolean isAdmin = authenticate.getAuthorities().stream()
+	            .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+
+	    if (!isAdmin) {
+	        throw new IllegalArgumentException("You must be an admin to log in here");
+	    }
+
+	    String token = jwtTokenProvider.generateToken(authenticate);
+
+	    return token;
+	}
+	
 
 }
