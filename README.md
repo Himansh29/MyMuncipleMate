@@ -36,7 +36,7 @@ Welcome to the MyMunicipalMate backend! This backend service handles authenticat
 - **Spring Security**: For authentication and authorization.
 - **JWT**: For secure token-based authentication.
 - **Hibernate**: ORM for database operations.
-- **H2 Database**: In-memory database for development and testing.
+- **MySQL**: relational database management system (RDBMS) for development and testing.
 - **Lombok**: To reduce boilerplate code.
 
 ## Getting Started
