@@ -54,4 +54,4 @@ Ensure you have the following installed:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/MyMunicipalMate-backend.git
+   git clone https://github.com/yourusername/MyMuncipleMateDummy.git
