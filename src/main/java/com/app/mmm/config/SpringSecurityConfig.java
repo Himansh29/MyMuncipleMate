@@ -12,6 +12,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -28,6 +31,9 @@ public class SpringSecurityConfig {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService;
 
 	@Autowired
 	private JwtAuthenticationEntryPoint authenticationEntryPoint;
@@ -45,14 +51,21 @@ public class SpringSecurityConfig {
 	    http.cors().and() 
 	        .csrf().disable()
 	        .authorizeHttpRequests(authorize -> {
-	            authorize.antMatchers(HttpMethod.POST, "/api/auth/**").permitAll(); // Corrected the endpoint pattern
+	            authorize.antMatchers(HttpMethod.POST, "/api/auth/**").permitAll(); 
 	            authorize.antMatchers("/api/admin/**").hasRole("ADMIN");
 	            authorize.antMatchers("/api/teams/**").hasRole("ADMIN");
 	            authorize.antMatchers("/api/citizens/**").authenticated();
 	            authorize.antMatchers("/api/complaints/**").authenticated();
 	            authorize.antMatchers("/api/feedback/**").authenticated();
 	            authorize.anyRequest().authenticated();
-	        })
+	        }) 
+	        .oauth2Login(oauth2 -> oauth2
+	                .userInfoEndpoint(userInfo -> userInfo
+	                    .userService(oauth2UserService)  // Default OAuth2UserService
+	                )
+	                .defaultSuccessUrl("/api/auth/google-login-success", true) // Redirect after success
+	                .failureUrl("/api/auth/google-login-failure")  // Redirect after failure
+	            )
 	        .exceptionHandling(exception -> exception
 	                .authenticationEntryPoint(authenticationEntryPoint))
 	        .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)

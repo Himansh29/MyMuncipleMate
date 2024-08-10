@@ -3,8 +3,11 @@ package com.app.mmm.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +30,7 @@ public class AuthenticationController {
 
     @Autowired
     private AuthenticationService authenticationService;
+
 
     @Operation(description = "Sign in")
     @PostMapping("/signin")
@@ -62,6 +66,23 @@ public class AuthenticationController {
         JwtAuthResponse authResponse = new JwtAuthResponse();
         authResponse.setAccessToken(token);
         return ResponseEntity.status(HttpStatus.OK).body(authResponse);
+    }
+    
+    @Operation(description = "Google Login Success")
+    @GetMapping("/google-login-success")
+    public ResponseEntity<?> googleLoginSuccess(Authentication authentication) {
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        String token = authenticationService.createTokenForOAuth2User(oAuth2User);
+        JwtAuthResponse authResponse = new JwtAuthResponse();
+        authResponse.setAccessToken(token);
+        return ResponseEntity.ok(authResponse);
+    }
+
+    @Operation(description = "Google Login Failure")
+    @GetMapping("/google-login-failure")
+    public ResponseEntity<?> googleLoginFailure() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ApiResponse("Google login failed"));
     }
 }
 
