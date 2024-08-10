@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import com.app.mmm.security.JwtAuthenticationEntryPoint;
 import com.app.mmm.security.JwtAuthenticationFilter;
@@ -23,17 +24,17 @@ import lombok.AllArgsConstructor;
 @Configuration
 @EnableMethodSecurity
 @AllArgsConstructor
-public class SpringSecurityConfig  {
-	
+public class SpringSecurityConfig {
+
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
+
 	@Autowired
 	private JwtAuthenticationEntryPoint authenticationEntryPoint;
-	
+
 	@Autowired
 	private JwtAuthenticationFilter authenticationFilter;
-	
+
 	@Bean
 	private static PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -41,30 +42,34 @@ public class SpringSecurityConfig  {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-	    http.csrf(csrf -> csrf.disable())
-	        .authorizeHttpRequests((authorize) -> {
-	            authorize.antMatchers(HttpMethod.POST, "/api/auth/**").permitAll();
-	            authorize.antMatchers("/api/admin/**").hasRole("ADMIN");
-	            authorize.antMatchers("/api/teams/**").hasRole("ADMIN");
-	            authorize.antMatchers("/api/citizens/**").authenticated();
-	            authorize.antMatchers("/api/complaints/**").authenticated();
-	            authorize.antMatchers("/api/feedback/**").authenticated();
-	            authorize.anyRequest().authenticated();
-	        })
-	        .httpBasic(Customizer.withDefaults());
+		http.cors().and() 
+				.csrf().disable().authorizeHttpRequests((authorize) -> {
+					authorize.antMatchers(HttpMethod.POST, "/api/auth/").permitAll();
+					authorize.antMatchers("/api/admin/").hasRole("ADMIN");
+					authorize.antMatchers("/api/teams/").hasRole("ADMIN");
+					authorize.antMatchers("/api/citizens/").authenticated();
+					authorize.antMatchers("/api/complaints/").authenticated();
+					authorize.antMatchers("/api/feedback/").authenticated();
+					authorize.anyRequest().authenticated();
+				}).exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint))
+				.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+				.cors(cors -> cors.configurationSource(request -> {
+					CorsConfiguration corsConfiguration = new CorsConfiguration();
+					corsConfiguration.addAllowedOrigin("http://localhost:3000");
+					corsConfiguration.addAllowedMethod("*");
+					corsConfiguration.addAllowedHeader("*");
+					corsConfiguration.setAllowCredentials(true);
+					return corsConfiguration;
+				}));
 
-	    http.exceptionHandling(exception -> exception
-	            .authenticationEntryPoint(authenticationEntryPoint));
-	    http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
-	    return http.build();
+		return http.build();
 	}
 
-	
 	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {	
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
 		return configuration.getAuthenticationManager();
 	}
-	
+
 //	@Bean
 //	public UserDetailsService userDetailsService() {
 //		UserDetails user = User.builder()

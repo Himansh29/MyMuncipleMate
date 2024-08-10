@@ -42,13 +42,13 @@ public class AuthenticationController {
 
     @Operation(description = "Send OTP for Password Reset")
     @PostMapping("/forgotpassword")
-    public ResponseEntity<?> sendOtpForPasswordReset(@RequestParam String email) {
+    public ResponseEntity<?> forgotPassword(@RequestParam String email) {
         return ResponseEntity.ok(authenticationService.sendOtpForPasswordReset(email));
     }
 
     @Operation(description = "Verify OTP and Reset Password")
     @PostMapping("/verify-otp")
-    public ResponseEntity<?> verifyOtpAndResetPassword(@Validated @RequestBody VerifyOtpDTO verifyOtpDTO) {
+    public ResponseEntity<?> resetPassword(@Validated @RequestBody VerifyOtpDTO verifyOtpDTO) {
         return ResponseEntity.ok(authenticationService.verifyOtpAndResetPassword(verifyOtpDTO));
     }
 }

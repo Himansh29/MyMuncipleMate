@@ -42,14 +42,6 @@ public class CitizenController {
 	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
-	@Operation(description = "Update Citizen Details")
-	@PutMapping("/{citizenId}")
-	public ResponseEntity<?> updateCompleteCitizenDetails(@PathVariable Long citizenId,
-			@Validated @RequestBody CitizenDto citizenDto) {
-		return ResponseEntity.ok(citizenService.updateCitizenById(citizenId, citizenDto));
-	}
-
-	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
 	@PatchMapping("/{citizenId}")
 	@Operation(description = "Update Partial Citizen Details")
 	public ResponseEntity<?> updatePartialCitizenDetails(@PathVariable Long citizenId,
