@@ -24,40 +24,38 @@ import io.swagger.v3.oas.annotations.Operation;
 @RequestMapping("/api/citizens")
 public class CitizenController {
 
-    @Autowired
-    private CitizenService citizenService;
+	@Autowired
+	private CitizenService citizenService;
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
-    @Operation(description = "Get Citizen By id")
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getCitizen(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(citizenService.getCitizen(id));
-    }
+	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
+	@Operation(description = "Get Citizen By id")
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getCitizen(@PathVariable Long id) {
+		return ResponseEntity.status(HttpStatus.OK).body(citizenService.getCitizen(id));
+	}
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
-    @Operation(description = "Get All Complaints Registered By A Single Citizen")
-    @GetMapping("/get_all_complaints/{citizenId}")
-    public ResponseEntity<?> getAllComplaintsByCitizen(@PathVariable Long citizenId) {
-        return ResponseEntity.status(HttpStatus.OK).body(citizenService.getAllComplaintsByCitizen(citizenId));
-    }
+	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
+	@Operation(description = "Get All Complaints Registered By A Single Citizen")
+	@GetMapping("/get_all_complaints/{citizenId}")
+	public ResponseEntity<?> getAllComplaintsByCitizen(@PathVariable Long citizenId) {
+		return ResponseEntity.status(HttpStatus.OK).body(citizenService.getAllComplaintsByCitizen(citizenId));
+	}
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
-    @Operation(description = "Update Citizen Details")
-    @PutMapping("/{citizenId}")
-    public ResponseEntity<?> updateCompleteCitizenDetails(@PathVariable Long citizenId,
-            @Validated @RequestBody CitizenDto citizenDto) {
-        return ResponseEntity.ok(citizenService.updateCitizenById(citizenId, citizenDto));
-    }
-    
-    @PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
-    @PatchMapping("/{citizenId}")
-    @Operation(description = "Update Partial Citizen Details")
-    public ResponseEntity<?> updatePartialCitizenDetails(@PathVariable Long citizenId,
-                                                         @RequestBody Map<String, Object> updates) {
-        CitizenDto updatedCitizen = citizenService.updatePartialCitizenDetails(citizenId, updates);
-        return ResponseEntity.ok(updatedCitizen);
-    }
-    
-    
+	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
+	@Operation(description = "Update Citizen Details")
+	@PutMapping("/{citizenId}")
+	public ResponseEntity<?> updateCompleteCitizenDetails(@PathVariable Long citizenId,
+			@Validated @RequestBody CitizenDto citizenDto) {
+		return ResponseEntity.ok(citizenService.updateCitizenById(citizenId, citizenDto));
+	}
+
+	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
+	@PatchMapping("/{citizenId}")
+	@Operation(description = "Update Partial Citizen Details")
+	public ResponseEntity<?> updatePartialCitizenDetails(@PathVariable Long citizenId,
+			@RequestBody Map<String, Object> updates) {
+		CitizenDto updatedCitizen = citizenService.updatePartialCitizenDetails(citizenId, updates);
+		return ResponseEntity.ok(updatedCitizen);
+	}
+
 }
-

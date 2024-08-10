@@ -49,7 +49,7 @@ public class Citizen extends BaseEntity {
     @OneToMany(mappedBy = "citizen", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Feedback> feedbacks = new ArrayList<>();
     
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "citizen_roles",
                joinColumns = @JoinColumn(name = "citizen_id"),
                inverseJoinColumns = @JoinColumn(name = "role_id"))

@@ -18,6 +18,7 @@ import com.app.mmm.dto.AddComplaintDTO;
 import com.app.mmm.dto.ApiResponse;
 import com.app.mmm.dto.ComplainToBeSHownOnFeedDTO;
 import com.app.mmm.dto.ComplaintDTO;
+import com.app.mmm.enums.ComplaintType;
 import com.app.mmm.service.ComplaintService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,14 +31,58 @@ public class ComplaintController {
     private ComplaintService service;
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
-    @Operation(description = "Add Complaint By Citizen ID")
-    @PostMapping("/{citizenId}")
-    public ResponseEntity<ApiResponse> addComplaint(@PathVariable Long citizenId, @RequestBody AddComplaintDTO complaint) {
+    @Operation(description = "Add Garbage Management Complaint")
+    @PostMapping("/garbage-management/{citizenId}")
+    public ResponseEntity<ApiResponse> addGarbageManagementComplaint(
+            @PathVariable Long citizenId,
+            @RequestBody AddComplaintDTO complaintDTO) {
         try {
-            ApiResponse response = service.addComplain(complaint, citizenId);
+            ApiResponse response = service.addComplaint(complaintDTO, citizenId, ComplaintType.GARBAGE_MANAGEMENT);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
+    @Operation(description = "Add Water Supply Complaint")
+    @PostMapping("/water-supply/{citizenId}")
+    public ResponseEntity<ApiResponse> addWaterSupplyComplaint(
+            @PathVariable Long citizenId,
+            @RequestBody AddComplaintDTO complaintDTO) {
+        try {
+            ApiResponse response = service.addComplaint(complaintDTO, citizenId, ComplaintType.WATER_SUPPLY);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
+    @Operation(description = "Add Electricity Management Complaint")
+    @PostMapping("/electricity-management/{citizenId}")
+    public ResponseEntity<ApiResponse> addElectricityManagementComplaint(
+            @PathVariable Long citizenId,
+            @RequestBody AddComplaintDTO complaintDTO) {
+        try {
+            ApiResponse response = service.addComplaint(complaintDTO, citizenId, ComplaintType.ELECTRICITY_MANAGEMENT);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
+    @Operation(description = "Add Road Repair Complaint")
+    @PostMapping("/road-repair/{citizenId}")
+    public ResponseEntity<ApiResponse> addRoadRepairComplaint(
+            @PathVariable Long citizenId,
+            @RequestBody AddComplaintDTO complaintDTO) {
+        try {
+            ApiResponse response = service.addComplaint(complaintDTO, citizenId, ComplaintType.ROAD_REPAIR);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
         }
     }
 

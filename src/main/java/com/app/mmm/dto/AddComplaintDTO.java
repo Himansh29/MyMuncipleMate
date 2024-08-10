@@ -16,8 +16,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AddComplaintDTO {
 
-	@NotNull(message = "Status is required")
-    private ComplaintType complaintType;
     @NotEmpty(message = "Description must not be empty")
     private String complaintDescription;
 

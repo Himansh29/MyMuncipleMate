@@ -15,6 +15,7 @@ import com.app.mmm.dto.ComplainToBeSHownOnFeedDTO;
 import com.app.mmm.dto.ComplaintDTO;
 import com.app.mmm.entity.Citizen;
 import com.app.mmm.entity.Complaint;
+import com.app.mmm.enums.ComplaintType;
 import com.app.mmm.enums.Status;
 import com.app.mmm.exception.ResourceNotFoundException;
 import com.app.mmm.repository.CitizenRepository;
@@ -35,19 +36,18 @@ public class ComplaintServiceImple implements ComplaintService {
 	private CitizenRepository citizenRepository;
 
 	@Override
-	public ApiResponse addComplain(AddComplaintDTO complaintDTO, Long id) throws ResourceNotFoundException {
-		Citizen citizen = citizenRepository.findById(id)
-	            .orElseThrow(() -> new ResourceNotFoundException("Citizen Id not found"));
-	    
-	    Complaint complaint = mapper.map(complaintDTO, Complaint.class);
-	    
-	    complaint.setStatus(Status.OPEN);
-	    
-	    complaint.setCitizen(citizen);
-	    complaintRepository.save(complaint);
-	    
-	    return new ApiResponse("Complaint added successfully");
-	}
+    public ApiResponse addComplaint(AddComplaintDTO complaintDTO, Long citizenId, ComplaintType complaintType) throws ResourceNotFoundException {
+        Citizen citizen = citizenRepository.findById(citizenId)
+                .orElseThrow(() -> new ResourceNotFoundException("Citizen Id not found"));
+        
+        Complaint complaint = mapper.map(complaintDTO, Complaint.class);
+        complaint.setComplaintType(complaintType);
+        complaint.setStatus(Status.OPEN);
+        complaint.setCitizen(citizen);
+        complaintRepository.save(complaint);
+        
+        return new ApiResponse("Complaint added successfully");
+    }
 
 	@Override
 	public ComplaintDTO getComplaintById(Long id) {

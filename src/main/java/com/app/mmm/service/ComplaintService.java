@@ -6,10 +6,12 @@ import com.app.mmm.dto.AddComplaintDTO;
 import com.app.mmm.dto.ApiResponse;
 import com.app.mmm.dto.ComplainToBeSHownOnFeedDTO;
 import com.app.mmm.dto.ComplaintDTO;
+import com.app.mmm.enums.ComplaintType;
+import com.app.mmm.exception.ResourceNotFoundException;
 
 public interface ComplaintService {
 
-	ApiResponse addComplain(AddComplaintDTO complaintDto, Long id);
+	ApiResponse addComplaint(AddComplaintDTO complaintDTO, Long citizenId, ComplaintType complaintType) throws ResourceNotFoundException;
     ComplaintDTO getComplaintById(Long id); 
     ApiResponse deleteComplaintById(Long id);
     List<ComplainToBeSHownOnFeedDTO> getAllComplaints();
