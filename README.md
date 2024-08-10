@@ -128,32 +128,53 @@ Ensure you have the following installed:
   - **Request Body**: `Map<String, Object>`
   - **Response**: `CitizenDto`
 
-### Complaint
+## Complaint
 
 - **Add Complaint By Citizen ID**: `POST /api/complaints/{citizenId}`
-  
   - **Path Variable**: `citizenId`
   - **Request Body**: `AddComplaintDTO`
   - **Response**: `ApiResponse`
 
 - **Get Complaint By ID**: `GET /api/complaints/{id}`
-  
   - **Path Variable**: `id`
   - **Response**: `ComplaintDTO`
 
 - **Get Complaints By Status**: `GET /api/complaints/status/{status}`
-  
   - **Path Variable**: `status`
   - **Response**: `List<ComplaintDTO>`
 
 - **Delete Complaint By ID**: `DELETE /api/complaints/{complaintId}`
-  
   - **Path Variable**: `complaintId`
   - **Response**: `ApiResponse`
 
 - **Get All Complaints**: `GET /api/complaints/`
-  
   - **Response**: `List<ComplainToBeSHownOnFeedDTO>`
+
+### New Endpoints for Complaint Types
+
+- **Add Garbage Management Complaint**: `POST /api/complaints/garbage-management/{citizenId}`
+  - **Path Variable**: `citizenId`
+  - **Request Body**: `AddComplaintDTO`
+  - **Response**: `ApiResponse`
+  - **Roles**: `ADMIN`, `CITIZEN`
+
+- **Add Water Supply Complaint**: `POST /api/complaints/water-supply/{citizenId}`
+  - **Path Variable**: `citizenId`
+  - **Request Body**: `AddComplaintDTO`
+  - **Response**: `ApiResponse`
+  - **Roles**: `ADMIN`, `CITIZEN`
+
+- **Add Electricity Management Complaint**: `POST /api/complaints/electricity-management/{citizenId}`
+  - **Path Variable**: `citizenId`
+  - **Request Body**: `AddComplaintDTO`
+  - **Response**: `ApiResponse`
+  - **Roles**: `ADMIN`, `CITIZEN`
+
+- **Add Road Repair Complaint**: `POST /api/complaints/road-repair/{citizenId}`
+  - **Path Variable**: `citizenId`
+  - **Request Body**: `AddComplaintDTO`
+  - **Response**: `ApiResponse`
+  - **Roles**: `ADMIN`, `CITIZEN`
 
 ### Feedback
 
