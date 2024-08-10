@@ -14,6 +14,9 @@ public class ForgotPasswordDTO {
     @Email(message = "Email should be valid")
     private String email;
     
+    @NotEmpty(message = "OTP must not be empty")
+    private String otp;
+    
     @NotEmpty(message = "Password must not be empty")
     private String password;
     

@@ -3,17 +3,16 @@ package com.app.mmm.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.mmm.dto.ApiResponse;
-import com.app.mmm.dto.ForgotPasswordDTO;
 import com.app.mmm.dto.RegisterDTO;
 import com.app.mmm.dto.SignInDTO;
+import com.app.mmm.dto.VerifyOtpDTO;
 import com.app.mmm.security.JwtAuthResponse;
 import com.app.mmm.service.AuthenticationService;
 
@@ -41,10 +40,16 @@ public class AuthenticationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.register(signupdto));
     }
 
-    @Operation(description = "Forgot password")
+    @Operation(description = "Send OTP for Password Reset")
     @PostMapping("/forgotpassword")
-    public ResponseEntity<?> forgotPassword(@Validated @RequestBody ForgotPasswordDTO forgotPasswordDTO) {
-        return ResponseEntity.ok(authenticationService.forgotPassword(forgotPasswordDTO));
+    public ResponseEntity<?> sendOtpForPasswordReset(@RequestParam String email) {
+        return ResponseEntity.ok(authenticationService.sendOtpForPasswordReset(email));
+    }
+
+    @Operation(description = "Verify OTP and Reset Password")
+    @PostMapping("/verify-otp")
+    public ResponseEntity<?> verifyOtpAndResetPassword(@Validated @RequestBody VerifyOtpDTO verifyOtpDTO) {
+        return ResponseEntity.ok(authenticationService.verifyOtpAndResetPassword(verifyOtpDTO));
     }
 }
 
