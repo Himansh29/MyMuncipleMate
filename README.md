@@ -45,7 +45,7 @@ Welcome to the MyMunicipalMate backend! This backend service handles authenticat
 
 Ensure you have the following installed:
 
-- **Java 11 or later**
+- **Java 17 or later**
 - **Maven**
 - **Postman** (for testing API endpoints)
 
