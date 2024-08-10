@@ -1,6 +1,6 @@
 # MyMunicipalMate Backend
 
-Welcome to the MyMunicipalMate backend! This backend service handles authentication, role management, citizen services, complaints, feedback, and more.
+Welcome to the MyMunicipalMate backend! This backend service handles authentication, role management, citizen services, complaints, feedback, and team management.
 
 ## Table of Contents
 
@@ -14,6 +14,8 @@ Welcome to the MyMunicipalMate backend! This backend service handles authenticat
    - [Authentication](#authentication)
    - [Admin](#admin)
    - [Citizen](#citizen)
+   - [Complaint](#complaint)
+   - [Feedback](#feedback)
    - [Team](#team)
 5. [Running Tests](#running-tests)
 6. [Contributing](#contributing)
@@ -25,7 +27,7 @@ Welcome to the MyMunicipalMate backend! This backend service handles authenticat
 - **Role Management**: Admins can assign and remove roles.
 - **Citizen Management**: CRUD operations for citizen details.
 - **Complaint Management**: Create, update, and retrieve complaints.
-- **Feedback Management**: Create and retrieve feedback.
+- **Feedback Management**: Create, retrieve, and delete feedback.
 - **Team Management**: Admins can manage teams.
 
 ## Technologies
