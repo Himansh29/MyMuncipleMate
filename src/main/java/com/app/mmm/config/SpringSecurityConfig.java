@@ -5,13 +5,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -32,9 +32,6 @@ public class SpringSecurityConfig {
 	@Autowired
 	private UserDetailsService userDetailsService;
 	
-	@Autowired
-	private OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService;
-
 	@Autowired
 	private JwtAuthenticationEntryPoint authenticationEntryPoint;
 
@@ -59,13 +56,6 @@ public class SpringSecurityConfig {
 	            authorize.antMatchers("/api/feedback/**").authenticated();
 	            authorize.anyRequest().authenticated();
 	        }) 
-	        .oauth2Login(oauth2 -> oauth2
-	                .userInfoEndpoint(userInfo -> userInfo
-	                    .userService(oauth2UserService)  // Default OAuth2UserService
-	                )
-	                .defaultSuccessUrl("/api/auth/google-login-success", true) // Redirect after success
-	                .failureUrl("/api/auth/google-login-failure")  // Redirect after failure
-	            )
 	        .exceptionHandling(exception -> exception
 	                .authenticationEntryPoint(authenticationEntryPoint))
 	        .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
