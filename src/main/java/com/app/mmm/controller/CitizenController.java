@@ -1,5 +1,7 @@
 package com.app.mmm.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,8 +53,8 @@ public class CitizenController {
     @PatchMapping("/{citizenId}")
     @Operation(description = "Update Partial Citizen Details")
     public ResponseEntity<?> updatePartialCitizenDetails(@PathVariable Long citizenId,
-            @Validated @RequestBody CitizenDto citizenDto) {
-        CitizenDto updatedCitizen = citizenService.updatePartialCitizenDetails(citizenId, citizenDto);
+                                                         @RequestBody Map<String, Object> updates) {
+        CitizenDto updatedCitizen = citizenService.updatePartialCitizenDetails(citizenId, updates);
         return ResponseEntity.ok(updatedCitizen);
     }
     

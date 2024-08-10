@@ -1,6 +1,7 @@
 package com.app.mmm.serviceimple;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -33,104 +34,86 @@ public class CitizenServiceImple implements CitizenService {
 
 	@Autowired
 	private CitizenRepository repo;
-	
+
 	@Autowired
 	private RoleRepository roleRepository;
-    
-    @Autowired
-    private PasswordEncoder encoder;
 
-    @Override
-    public CitizenDtoWithComplaints getCitizen(Long id) {
-        Citizen citizen = repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("CITIZEN ID NOT FOUND"));
-        CitizenDtoWithComplaints citizenDto = mapper.map(citizen, CitizenDtoWithComplaints.class);
-        return citizenDto;
-    }
+	@Autowired
+	private PasswordEncoder encoder;
 
-    @Override
-    public ApiResponse deleteCitizenByID(Long id) {
-        Citizen citizenToBeDeleted = repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("CITIZEN ID NOT FOUND"));
-        repo.delete(citizenToBeDeleted);
-        return new ApiResponse("Citizen Deleted With Id: " + id);
-    }
+	@Override
+	public CitizenDtoWithComplaints getCitizen(Long id) {
+		Citizen citizen = repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("CITIZEN ID NOT FOUND"));
+		CitizenDtoWithComplaints citizenDto = mapper.map(citizen, CitizenDtoWithComplaints.class);
+		return citizenDto;
+	}
 
-    @Override
-    public List<AddComplaintDTO> getAllComplaintsByCitizen(Long id) {
-        Citizen citizen = repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Citizen ID NOT FOUND"));
+	@Override
+	public ApiResponse deleteCitizenByID(Long id) {
+		Citizen citizenToBeDeleted = repo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("CITIZEN ID NOT FOUND"));
+		repo.delete(citizenToBeDeleted);
+		return new ApiResponse("Citizen Deleted With Id: " + id);
+	}
 
-        List<Complaint> complaints = citizen.getComplaints();
+	@Override
+	public List<AddComplaintDTO> getAllComplaintsByCitizen(Long id) {
+		Citizen citizen = repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Citizen ID NOT FOUND"));
 
-        return complaints.stream()
-                .map(complaint -> mapper.map(complaint, AddComplaintDTO.class))
-                .collect(Collectors.toList());
-    }
+		List<Complaint> complaints = citizen.getComplaints();
 
-    @Override
-    public CitizenDto updateCitizenById(Long id, CitizenDto citizenDto) {
-        Citizen citizen = repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Citizen ID NOT FOUND"));
+		return complaints.stream().map(complaint -> mapper.map(complaint, AddComplaintDTO.class))
+				.collect(Collectors.toList());
+	}
 
-        if (citizenDto.getPassword().equals(citizenDto.getConfirmPassword())) {
-            mapper.map(citizenDto, citizen);
-            return citizenDto;
-        }
-        throw new ResourceNotFoundException("Passwords don't match");
-    }
+	@Override
+	public CitizenDto updateCitizenById(Long id, CitizenDto citizenDto) {
+		Citizen citizen = repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Citizen ID NOT FOUND"));
 
-    @Override
-    public List<CitizenSummaryDto> getAllCitizen() {
-        List<CitizenSummaryDto> citizenDto = repo.findAll().stream()
-                .map(i -> mapper.map(i, CitizenSummaryDto.class))
-                .collect(Collectors.toList());
-        return citizenDto;
-    }
+		if (citizenDto.getPassword().equals(citizenDto.getConfirmPassword())) {
+			mapper.map(citizenDto, citizen);
+			return citizenDto;
+		}
+		throw new ResourceNotFoundException("Passwords don't match");
+	}
 
-    @Override
-    public ApiResponse addRoleToCitizen(RoleAssignmentDTO roleAssignmentDTO) {
-        Citizen citizen = repo.findByEmail(roleAssignmentDTO.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("User with email: " + roleAssignmentDTO.getEmail() + " doesn't exist"));
+	@Override
+	public List<CitizenSummaryDto> getAllCitizen() {
+		List<CitizenSummaryDto> citizenDto = repo.findAll().stream().map(i -> mapper.map(i, CitizenSummaryDto.class))
+				.collect(Collectors.toList());
+		return citizenDto;
+	}
 
-        Role role = roleRepository.findByName(roleAssignmentDTO.getRoleName())
-                .orElseThrow(() -> new ResourceNotFoundException("Role: " + roleAssignmentDTO.getRoleName() + " does not exist"));
+	@Override
+	public ApiResponse addRoleToCitizen(RoleAssignmentDTO roleAssignmentDTO) {
+		Citizen citizen = repo.findByEmail(roleAssignmentDTO.getEmail())
+				.orElseThrow(() -> new ResourceNotFoundException(
+						"User with email: " + roleAssignmentDTO.getEmail() + " doesn't exist"));
 
-        citizen.addRole(role);
-        repo.save(citizen); 
+		Role role = roleRepository.findByName(roleAssignmentDTO.getRoleName()).orElseThrow(
+				() -> new ResourceNotFoundException("Role: " + roleAssignmentDTO.getRoleName() + " does not exist"));
 
-        return new ApiResponse("Role added successfully");
-    }
+		citizen.addRole(role);
+		repo.save(citizen);
 
-    @Override
-    public CitizenDto updatePartialCitizenDetails(Long citizenId, CitizenDto citizenDto) {
-        Citizen existingCitizen = repo.findById(citizenId)
-                .orElseThrow(() -> new ResourceNotFoundException("Citizen not found with ID: " + citizenId));
+		return new ApiResponse("Role added successfully");
+	}
 
+	@Override
+	public CitizenDto updatePartialCitizenDetails(Long citizenId, Map<String, Object> updates) {
+		Citizen citizen = repo.findById(citizenId)
+				.orElseThrow(() -> new ResourceNotFoundException("Invalid Citizen ID"));
 
-        if (citizenDto.getFirstName() != null) {
-            existingCitizen.setFirstName(citizenDto.getFirstName());
-        }
-        if (citizenDto.getLastName() != null) {
-            existingCitizen.setLastName(citizenDto.getLastName());
-        }
-        if (citizenDto.getUsername() != null) {
-            existingCitizen.setUsername(citizenDto.getUsername());
-        }
-        if (citizenDto.getEmail() != null) {
-            existingCitizen.setEmail(citizenDto.getEmail());
-        }
+		if (updates.containsKey("password")) {
+			String newPassword = (String) updates.get("password");
+			String encryptedPassword = encoder.encode(newPassword);
+			citizen.setPassword(encryptedPassword);
+			updates.remove("password");
+		}
 
-        Citizen updatedCitizen = repo.save(existingCitizen);
-        return mapToDto(updatedCitizen);
-    }
+		mapper.map(updates, citizen);
+		Citizen updatedCitizen = repo.save(citizen);
+		return mapper.map(updatedCitizen, CitizenDto.class);
+	}
 
-    private CitizenDto mapToDto(Citizen citizen) {
-        CitizenDto dto = new CitizenDto();
-        dto.setFirstName(citizen.getFirstName());
-        dto.setLastName(citizen.getLastName());
-        dto.setUsername(citizen.getUsername());
-        dto.setEmail(citizen.getEmail());
-
-        return dto;
-    }
-	
-	
 }
