@@ -1,11 +1,10 @@
 package com.app.mmm.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +30,6 @@ public class AuthenticationController {
 
     @Autowired
     private AuthenticationService authenticationService;
-
 
     @Operation(description = "Sign in")
     @PostMapping("/signin")
@@ -71,20 +69,10 @@ public class AuthenticationController {
     
     @Operation(description = "Google Login Success")
     @GetMapping("/login")
-    public ResponseEntity<?> googleLoginSuccess(Authentication authentication) {
+    public String googleLoginSuccess(Principal principal) {
 
-        if (authentication instanceof OAuth2AuthenticationToken) {
-            OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-
-            String token = authenticationService.createTokenForOAuth2User(oAuth2User);
-            JwtAuthResponse authResponse = new JwtAuthResponse();
-            authResponse.setAccessToken(token);
-            return ResponseEntity.ok(authResponse);
-        } else {
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse("Authentication failed"));
-        }
+    	return "Hi " + principal.getName() + " Welcome to Oauth2";
+        
     }
 
 

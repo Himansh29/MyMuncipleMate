@@ -1,13 +1,20 @@
 package com.app.mmm.serviceimple;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.app.mmm.dto.AddComplaintDTO;
 import com.app.mmm.dto.ApiResponse;
@@ -35,19 +42,54 @@ public class ComplaintServiceImple implements ComplaintService {
 	@Autowired
 	private CitizenRepository citizenRepository;
 
+	private final Path fileStorageLocation = Paths.get("uploaded-files").toAbsolutePath().normalize();
+
+	@PostConstruct
+	public void init() {
+		try {
+			Files.createDirectories(fileStorageLocation);
+		} catch (Exception ex) {
+			throw new RuntimeException("Could not create upload directory", ex);
+		}
+	}
+
+	public String handleFileUpload(MultipartFile file) throws RuntimeException {
+	    if (file != null && !file.isEmpty()) {
+	        try {
+	            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+	            Path targetLocation = fileStorageLocation.resolve(fileName);
+
+	            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+	            return fileName; 
+	        } catch (Exception ex) {
+	            throw new RuntimeException("Could not store file", ex);
+	        }
+	    }
+	    return null;
+	}
+
+
 	@Override
-	public ApiResponse addComplaint(AddComplaintDTO complaintDTO, String email, ComplaintType complaintType) throws ResourceNotFoundException {
+	public ApiResponse addComplaint(MultipartFile file, AddComplaintDTO complaintDTO, String email, ComplaintType complaintType)
+	        throws ResourceNotFoundException {
 	    Citizen citizen = citizenRepository.findByEmail(email)
 	            .orElseThrow(() -> new ResourceNotFoundException("Citizen with email " + email + " not found"));
-	    
+
 	    Complaint complaint = mapper.map(complaintDTO, Complaint.class);
 	    complaint.setComplaintType(complaintType);
 	    complaint.setStatus(Status.OPEN);
 	    complaint.setCitizen(citizen);
+
+	    if (file != null) {
+	        String filePath = handleFileUpload(file);
+	        complaint.setImagePath(filePath);
+	    }
+
 	    complaintRepository.save(complaint);
-	    
+
 	    return new ApiResponse("Complaint added successfully");
 	}
+
 
 	@Override
 	public ComplaintDTO getComplaintById(Long id) {
@@ -66,30 +108,29 @@ public class ComplaintServiceImple implements ComplaintService {
 
 	@Override
 	public List<ComplainToBeSHownOnFeedDTO> getAllComplaints() {
-		return complaintRepository.findAll().stream().map(complaint -> mapper.map(complaint, ComplainToBeSHownOnFeedDTO.class))
-				.collect(Collectors.toList());
+		return complaintRepository.findAll().stream()
+				.map(complaint -> mapper.map(complaint, ComplainToBeSHownOnFeedDTO.class)).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<ComplaintDTO> getComplaintsByStatus(String status) {
 		Status complaintStatus = Status.valueOf(status.toUpperCase());
 		List<Complaint> complaintDTO = complaintRepository.findByStatus(complaintStatus);
-		return complaintDTO.stream().map(dto -> mapper.map(dto, ComplaintDTO.class))
-				.collect(Collectors.toList());
+		return complaintDTO.stream().map(dto -> mapper.map(dto, ComplaintDTO.class)).collect(Collectors.toList());
 	}
-	
-	@Override
-	public ApiResponse markComplaintAsResolved(Long id) {
-        return changeStatus(id, "RESOLVED");
-    }
 
 	@Override
-    public ApiResponse markComplaintAsOpen(Long id) {
-        return changeStatus(id, "OPEN");
-    }
-	
+	public ApiResponse markComplaintAsResolved(Long id) {
+		return changeStatus(id, "RESOLVED");
+	}
+
 	@Override
-    public ApiResponse changeStatus(Long id, String status) {
+	public ApiResponse markComplaintAsOpen(Long id) {
+		return changeStatus(id, "OPEN");
+	}
+
+	@Override
+	public ApiResponse changeStatus(Long id, String status) {
 		try {
 			Status newStatus;
 			try {
@@ -109,5 +150,5 @@ public class ComplaintServiceImple implements ComplaintService {
 		} catch (Exception e) {
 			return new ApiResponse(e.getMessage());
 		}
-    }
+	}
 }

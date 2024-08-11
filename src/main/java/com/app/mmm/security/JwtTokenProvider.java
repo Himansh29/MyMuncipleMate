@@ -58,7 +58,11 @@ public class JwtTokenProvider {
 
 	// Validate JWT Token
 	public boolean validateToken(String token) {
-		Jwts.parserBuilder().setSigningKey(key()).build().parse(token);
-		return true;
+		try {
+			Jwts.parserBuilder().setSigningKey(key()).build().parse(token);
+			return true;
+		} catch (JwtException | IllegalArgumentException e) {
+			return false;
+		}
 	}
 }
