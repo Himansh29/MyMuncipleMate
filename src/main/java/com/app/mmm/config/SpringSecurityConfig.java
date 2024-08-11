@@ -59,10 +59,10 @@ public class SpringSecurityConfig {
                 authorize.anyRequest().authenticated();
             })
             .formLogin()
-                .loginPage("/api/auth/login") // Specify your login endpoint
+                .loginPage("/api/auth/login") 
                 .permitAll()
                 .failureUrl("/api/auth/login?error=true")
-                .defaultSuccessUrl("/api/dashboard", true) // Change to your desired success URL
+                .defaultSuccessUrl("/api/dashboard", true) 
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .and()
