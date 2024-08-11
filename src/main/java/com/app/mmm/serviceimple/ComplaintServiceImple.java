@@ -36,18 +36,18 @@ public class ComplaintServiceImple implements ComplaintService {
 	private CitizenRepository citizenRepository;
 
 	@Override
-    public ApiResponse addComplaint(AddComplaintDTO complaintDTO, Long citizenId, ComplaintType complaintType) throws ResourceNotFoundException {
-        Citizen citizen = citizenRepository.findById(citizenId)
-                .orElseThrow(() -> new ResourceNotFoundException("Citizen Id not found"));
-        
-        Complaint complaint = mapper.map(complaintDTO, Complaint.class);
-        complaint.setComplaintType(complaintType);
-        complaint.setStatus(Status.OPEN);
-        complaint.setCitizen(citizen);
-        complaintRepository.save(complaint);
-        
-        return new ApiResponse("Complaint added successfully");
-    }
+	public ApiResponse addComplaint(AddComplaintDTO complaintDTO, String email, ComplaintType complaintType) throws ResourceNotFoundException {
+	    Citizen citizen = citizenRepository.findByEmail(email)
+	            .orElseThrow(() -> new ResourceNotFoundException("Citizen with email " + email + " not found"));
+	    
+	    Complaint complaint = mapper.map(complaintDTO, Complaint.class);
+	    complaint.setComplaintType(complaintType);
+	    complaint.setStatus(Status.OPEN);
+	    complaint.setCitizen(citizen);
+	    complaintRepository.save(complaint);
+	    
+	    return new ApiResponse("Complaint added successfully");
+	}
 
 	@Override
 	public ComplaintDTO getComplaintById(Long id) {

@@ -32,11 +32,11 @@ public class ComplaintController {
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
 	@Operation(description = "Add Garbage Management Complaint")
-	@PostMapping("/garbage-management/{citizenId}")
-	public ResponseEntity<ApiResponse> addGarbageManagementComplaint(@PathVariable Long citizenId,
-			@RequestBody AddComplaintDTO complaintDTO) {
+	@PostMapping("/garbage-management/{email}")
+	public ResponseEntity<ApiResponse> addGarbageManagementComplaint(@PathVariable String email,
+	        @RequestBody AddComplaintDTO complaintDTO) {
 		try {
-			ApiResponse response = service.addComplaint(complaintDTO, citizenId, ComplaintType.GARBAGE_MANAGEMENT);
+			ApiResponse response = service.addComplaint(complaintDTO, email, ComplaintType.GARBAGE_MANAGEMENT);
 			return ResponseEntity.status(HttpStatus.CREATED).body(response);
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
@@ -45,37 +45,37 @@ public class ComplaintController {
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
 	@Operation(description = "Add Water Supply Complaint")
-	@PostMapping("/water-supply/{citizenId}")
-	public ResponseEntity<ApiResponse> addWaterSupplyComplaint(@PathVariable Long citizenId,
-			@RequestBody AddComplaintDTO complaintDTO) {
-		try {
-			ApiResponse response = service.addComplaint(complaintDTO, citizenId, ComplaintType.WATER_SUPPLY);
-			return ResponseEntity.status(HttpStatus.CREATED).body(response);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
-		}
+	@PostMapping("/water-supply/{email}")
+	public ResponseEntity<ApiResponse> addWaterSupplyComplaint(@PathVariable String email,
+	        @RequestBody AddComplaintDTO complaintDTO) {
+	    try {
+	        ApiResponse response = service.addComplaint(complaintDTO, email, ComplaintType.WATER_SUPPLY);
+	        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	    } catch (RuntimeException e) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
+	    }
 	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
 	@Operation(description = "Add Electricity Management Complaint")
-	@PostMapping("/electricity-management/{citizenId}")
-	public ResponseEntity<ApiResponse> addElectricityManagementComplaint(@PathVariable Long citizenId,
-			@RequestBody AddComplaintDTO complaintDTO) {
-		try {
-			ApiResponse response = service.addComplaint(complaintDTO, citizenId, ComplaintType.ELECTRICITY_MANAGEMENT);
-			return ResponseEntity.status(HttpStatus.CREATED).body(response);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
-		}
+	@PostMapping("/electricity-management/{email}")
+	public ResponseEntity<ApiResponse> addElectricityManagementComplaint(@PathVariable String email,
+	        @RequestBody AddComplaintDTO complaintDTO) {
+	    try {
+	        ApiResponse response = service.addComplaint(complaintDTO, email, ComplaintType.ELECTRICITY_MANAGEMENT);
+	        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	    } catch (RuntimeException e) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
+	    }
 	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
 	@Operation(description = "Add Road Repair Complaint")
-	@PostMapping("/road-repair/{citizenId}")
-	public ResponseEntity<ApiResponse> addRoadRepairComplaint(@PathVariable Long citizenId,
-			@RequestBody AddComplaintDTO complaintDTO) {
+	@PostMapping("/road-repair/{email}")
+	public ResponseEntity<ApiResponse> addRoadRepairComplaint(@PathVariable String email,
+	        @RequestBody AddComplaintDTO complaintDTO) {
 		try {
-			ApiResponse response = service.addComplaint(complaintDTO, citizenId, ComplaintType.ROAD_REPAIR);
+			ApiResponse response = service.addComplaint(complaintDTO, email, ComplaintType.ROAD_REPAIR);
 			return ResponseEntity.status(HttpStatus.CREATED).body(response);
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));

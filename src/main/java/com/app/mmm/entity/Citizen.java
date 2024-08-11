@@ -17,7 +17,9 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @AllArgsConstructor
@@ -26,6 +28,8 @@ import lombok.RequiredArgsConstructor;
         @UniqueConstraint(columnNames = {"username"}),
         @UniqueConstraint(columnNames = {"email"})
 })
+@Getter
+@Setter
 public class Citizen extends BaseEntity {
 
 	@Column(length = 50, nullable = false)

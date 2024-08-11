@@ -12,12 +12,11 @@ import org.springframework.stereotype.Service;
 import com.app.mmm.dto.TeamDTO;
 import com.app.mmm.entity.Complaint;
 import com.app.mmm.entity.Team;
+import com.app.mmm.enums.ComplaintType;
 import com.app.mmm.exception.ResourceNotFoundException;
 import com.app.mmm.repository.ComplaintRepository;
 import com.app.mmm.repository.TeamRepository;
 import com.app.mmm.service.TeamService;
-
-import io.swagger.v3.oas.annotations.servers.Server;
 
 @Service
 @Transactional
@@ -71,16 +70,46 @@ public class TeamServiceImple implements TeamService {
         teamRepository.deleteById(id);
     }
 
-	@Override
-	public void assignTeamToComplaint(Long complaintId, Long teamId) {
-		Complaint complaint = complaintRepository.findById(complaintId)
+    @Override
+    public void assignTeamToComplaint(Long complaintId) {
+        Complaint complaint = complaintRepository.findById(complaintId)
                 .orElseThrow(() -> new ResourceNotFoundException("Complaint not found with ID: " + complaintId));
-        
-        Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new ResourceNotFoundException("Team not found with ID: " + teamId));
+
+        Team team = getTeamForComplaintType(complaint.getComplaintType());
         
         complaint.setTeam(team);
         complaintRepository.save(complaint);
-	}
+    }
+
+    private Team getTeamForComplaintType(ComplaintType complaintType) {
+        switch (complaintType) {
+            case GARBAGE_MANAGEMENT:
+                return teamRepository.findByName("Waste_Management_Team")
+                        .orElseThrow(() -> new ResourceNotFoundException("Team not found for Garbage Management"));
+            case WATER_SUPPLY:
+                return teamRepository.findByName("Water_Supply_Team")
+                        .orElseThrow(() -> new ResourceNotFoundException("Team not found for Water Supply"));
+            case ELECTRICITY_MANAGEMENT:
+                return teamRepository.findByName("Electricity_Maintenance_Team")
+                        .orElseThrow(() -> new ResourceNotFoundException("Team not found for Electricity Management"));
+            case ROAD_REPAIR:
+                return teamRepository.findByName("Road_Repair_Team")
+                        .orElseThrow(() -> new ResourceNotFoundException("Team not found for Road Repair"));
+            case SANITATION_ISSUES:
+                return teamRepository.findByName("Sanitation_and_Hygiene_Team")
+                        .orElseThrow(() -> new ResourceNotFoundException("Team not found for Sanitation Issues"));
+            case TRAFFIC_MANAGEMENT:
+                return teamRepository.findByName("Traffic_Control_Team")
+                        .orElseThrow(() -> new ResourceNotFoundException("Team not found for Traffic Management"));
+            case ENVIRONMENTAL_HAZARDS:
+                return teamRepository.findByName("Environmental_Protection_Team")
+                        .orElseThrow(() -> new ResourceNotFoundException("Team not found for Environmental Hazards"));
+            case FIRE_SAFETY:
+                return teamRepository.findByName("Fire_Safety_and_Inspection_Team")
+                        .orElseThrow(() -> new ResourceNotFoundException("Team not found for Fire Safety"));
+            default:
+                throw new IllegalArgumentException("Unknown Complaint Type: " + complaintType);
+        }
+    }
 
 }

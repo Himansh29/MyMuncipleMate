@@ -46,10 +46,10 @@ public class FeedbackController {
     }
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getFeedbackById(@PathVariable Long id) {
+    @GetMapping("/{feedbackId}")
+    public ResponseEntity<?> getFeedbackById(@PathVariable Long feedbackId) {
         try {
-            return ResponseEntity.ok(feedbackService.getFeedbackById(id));
+            return ResponseEntity.ok(feedbackService.getFeedbackById(feedbackId));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage()));
         }

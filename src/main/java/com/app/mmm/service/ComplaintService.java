@@ -11,7 +11,7 @@ import com.app.mmm.exception.ResourceNotFoundException;
 
 public interface ComplaintService {
 
-	ApiResponse addComplaint(AddComplaintDTO complaintDTO, Long citizenId, ComplaintType complaintType) throws ResourceNotFoundException;
+	ApiResponse addComplaint(AddComplaintDTO complaintDTO, String email, ComplaintType complaintType) throws ResourceNotFoundException;
     ComplaintDTO getComplaintById(Long id); 
     ApiResponse deleteComplaintById(Long id);
     List<ComplainToBeSHownOnFeedDTO> getAllComplaints();

@@ -89,10 +89,10 @@ public class AdminController {
     
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(description = "Assign Team to the Complaint")
-    @PutMapping("/assign-team/{complaintId}/{teamId}")
-    public ResponseEntity<?> assignTeamToComplaint(@PathVariable Long complaintId, @PathVariable Long teamId) {
+    @PutMapping("/assign-team/{complaintId}")
+    public ResponseEntity<?> assignTeamToComplaint(@PathVariable Long complaintId) {
         try {
-        	teamService.assignTeamToComplaint(complaintId, teamId);
+        	teamService.assignTeamToComplaint(complaintId);
             return ResponseEntity.status(HttpStatus.OK).body("Team assigned to complaint successfully.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

@@ -16,5 +16,5 @@ public interface TeamService {
 
 	void deleteTeam(Long id);
 	
-	void assignTeamToComplaint(Long complaintId, Long teamId);
+	void assignTeamToComplaint(Long complaintId);
 }
