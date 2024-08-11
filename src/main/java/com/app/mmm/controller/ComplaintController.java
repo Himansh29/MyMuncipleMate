@@ -32,134 +32,134 @@ import io.swagger.v3.oas.annotations.Operation;
 public class ComplaintController {
 
 	@Autowired
-	private ComplaintService service;
+	private ComplaintService complaintService;
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
-	@Operation(description = "Add Garbage Management Complaint")
-	@PostMapping("/garbage-management/{email}")
-	public ResponseEntity<ApiResponse> addGarbageManagementComplaint(
-	        @PathVariable String email,
-	        @RequestParam("file") MultipartFile file,
-	        @RequestPart("complaint") AddComplaintDTO complaintDTO) {
-	    try {
-	        ApiResponse response = service.addComplaint(file, complaintDTO, email, ComplaintType.GARBAGE_MANAGEMENT);
-	        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-	    } catch (RuntimeException e) {
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
-	    }
-	}
-
-	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
-	@Operation(description = "Add Water Supply Complaint")
-	@PostMapping("/water-supply/{email}")
-	public ResponseEntity<ApiResponse> addWaterSupplyComplaint(
-	        @PathVariable String email,
-	        @RequestParam("file") MultipartFile file,
-	        @RequestPart("complaint") AddComplaintDTO complaintDTO) {
-	    try {
-	        ApiResponse response = service.addComplaint(file, complaintDTO, email, ComplaintType.WATER_SUPPLY);
-	        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-	    } catch (RuntimeException e) {
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
-	    }
-	}
-
-	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
-	@Operation(description = "Add Road Repair Complaint")
-	@PostMapping("/road-repair/{email}")
-	public ResponseEntity<ApiResponse> addRoadRepairComplaint(
-	        @PathVariable String email,
-	        @RequestParam("file") MultipartFile file,
-	        @RequestPart("complaint") AddComplaintDTO complaintDTO) {
-	    try {
-	        ApiResponse response = service.addComplaint(file, complaintDTO, email, ComplaintType.ROAD_REPAIR);
-	        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-	    } catch (RuntimeException e) {
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
-	    }
-	}
-
-	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
-	@Operation(description = "Add Sanitation Issues Complaint")
-	@PostMapping("/sanitation-issues/{email}")
-	public ResponseEntity<ApiResponse> addSanitationIssuesComplaint(
-	        @PathVariable String email,
-	        @RequestParam("file") MultipartFile file,
-	        @RequestPart("complaint") AddComplaintDTO complaintDTO) {
-	    try {
-	        ApiResponse response = service.addComplaint(file, complaintDTO, email, ComplaintType.SANITATION_ISSUES);
-	        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-	    } catch (RuntimeException e) {
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
-	    }
-	}
-
-	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
-	@Operation(description = "Add Traffic Management Complaint")
-	@PostMapping("/traffic-management/{email}")
-	public ResponseEntity<ApiResponse> addTrafficManagementComplaint(
-	        @PathVariable String email,
-	        @RequestParam("file") MultipartFile file,
-	        @RequestPart("complaint") AddComplaintDTO complaintDTO) {
-	    try {
-	        ApiResponse response = service.addComplaint(file, complaintDTO, email, ComplaintType.TRAFFIC_MANAGEMENT);
-	        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-	    } catch (RuntimeException e) {
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
-	    }
-	}
-
-	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
-	@Operation(description = "Add Environmental Hazards Complaint")
-	@PostMapping("/environmental-hazards/{email}")
-	public ResponseEntity<ApiResponse> addEnvironmentalHazardsComplaint(
-	        @PathVariable String email,
-	        @RequestParam("file") MultipartFile file,
-	        @RequestPart("complaint") AddComplaintDTO complaintDTO) {
-	    try {
-	        ApiResponse response = service.addComplaint(file, complaintDTO, email, ComplaintType.ENVIRONMENTAL_HAZARDS);
-	        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-	    } catch (RuntimeException e) {
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
-	    }
-	}
-
-	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
-	@Operation(description = "Add Fire Safety Complaint")
-	@PostMapping("/fire-safety/{email}")
-	public ResponseEntity<ApiResponse> addFireSafetyComplaint(
-	        @PathVariable String email,
-	        @RequestParam("file") MultipartFile file,
-	        @RequestPart("complaint") AddComplaintDTO complaintDTO) {
-	    try {
-	        ApiResponse response = service.addComplaint(file, complaintDTO, email, ComplaintType.FIRE_SAFETY);
-	        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-	    } catch (RuntimeException e) {
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
-	    }
-	}
+    @Operation(description = "Add Garbage Management Complaint")
+    @PostMapping("/garbage-management/{email}")
+    public ResponseEntity<ApiResponse> addGarbageManagementComplaint(
+            @PathVariable String email,
+            @RequestParam("file") MultipartFile file,
+            @RequestPart("complaint") AddComplaintDTO complaintDTO) {
+        try {
+            ApiResponse response = complaintService.addComplaint(file, complaintDTO, email, ComplaintType.GARBAGE_MANAGEMENT);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
+        }
+    }
 	
 	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
-	@Operation(description = "Add Electricity Management Complaint")
-	@PostMapping("/electricity-management/{email}")
-	public ResponseEntity<ApiResponse> addElectricityManagementComplaint(
-	        @PathVariable String email,
-	        @RequestParam("file") MultipartFile file,
-	        @RequestPart("complaint") AddComplaintDTO complaintDTO) {
-	    try {
-	        ApiResponse response = service.addComplaint(file, complaintDTO, email, ComplaintType.ELECTRICITY_MANAGEMENT);
-	        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-	    } catch (RuntimeException e) {
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
-	    }
-	}
+    @Operation(description = "Add Water Supply Complaint")
+    @PostMapping("/water-supply/{email}")
+    public ResponseEntity<ApiResponse> addWaterSupplyComplaint(
+            @PathVariable String email,
+            @RequestParam("file") MultipartFile file,
+            @RequestPart("complaint") AddComplaintDTO complaintDTO) {
+        try {
+            ApiResponse response = complaintService.addComplaint(file, complaintDTO, email, ComplaintType.WATER_SUPPLY);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
+        }
+    }
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
+    @Operation(description = "Add Road Repair Complaint")
+    @PostMapping("/road-repair/{email}")
+    public ResponseEntity<ApiResponse> addRoadRepairComplaint(
+            @PathVariable String email,
+            @RequestParam("file") MultipartFile file,
+            @RequestPart("complaint") AddComplaintDTO complaintDTO) {
+        try {
+            ApiResponse response = complaintService.addComplaint(file, complaintDTO, email, ComplaintType.ROAD_REPAIR);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
+        }
+    }
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
+    @Operation(description = "Add Sanitation Issues Complaint")
+    @PostMapping("/sanitation-issues/{email}")
+    public ResponseEntity<ApiResponse> addSanitationIssuesComplaint(
+            @PathVariable String email,
+            @RequestParam("file") MultipartFile file,
+            @RequestPart("complaint") AddComplaintDTO complaintDTO) {
+        try {
+            ApiResponse response = complaintService.addComplaint(file, complaintDTO, email, ComplaintType.SANITATION_ISSUES);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
+        }
+    }
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
+    @Operation(description = "Add Traffic Management Complaint")
+    @PostMapping("/traffic-management/{email}")
+    public ResponseEntity<ApiResponse> addTrafficManagementComplaint(
+            @PathVariable String email,
+            @RequestParam("file") MultipartFile file,
+            @RequestPart("complaint") AddComplaintDTO complaintDTO) {
+        try {
+            ApiResponse response = complaintService.addComplaint(file, complaintDTO, email, ComplaintType.TRAFFIC_MANAGEMENT);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
+        }
+    }
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
+    @Operation(description = "Add Environmental Hazards Complaint")
+    @PostMapping("/environmental-hazards/{email}")
+    public ResponseEntity<ApiResponse> addEnvironmentalHazardsComplaint(
+            @PathVariable String email,
+            @RequestParam("file") MultipartFile file,
+            @RequestPart("complaint") AddComplaintDTO complaintDTO) {
+        try {
+            ApiResponse response = complaintService.addComplaint(file, complaintDTO, email, ComplaintType.ENVIRONMENTAL_HAZARDS);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
+        }
+    }
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
+    @Operation(description = "Add Fire Safety Complaint")
+    @PostMapping("/fire-safety/{email}")
+    public ResponseEntity<ApiResponse> addFireSafetyComplaint(
+            @PathVariable String email,
+            @RequestParam("file") MultipartFile file,
+            @RequestPart("complaint") AddComplaintDTO complaintDTO) {
+        try {
+            ApiResponse response = complaintService.addComplaint(file, complaintDTO, email, ComplaintType.FIRE_SAFETY);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
+        }
+    }
+	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
+    @Operation(description = "Add Electricity Management Complaint")
+    @PostMapping("/electricity-management/{email}")
+    public ResponseEntity<ApiResponse> addElectricityManagementComplaint(
+            @PathVariable String email,
+            @RequestParam("file") MultipartFile file,
+            @RequestPart("complaint") AddComplaintDTO complaintDTO) {
+        try {
+            ApiResponse response = complaintService.addComplaint(file, complaintDTO, email, ComplaintType.ELECTRICITY_MANAGEMENT);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
+        }
+    }
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
 	@Operation(description = "Get Complaint By ID")
 	@GetMapping("/{id}")
 	public ResponseEntity<ComplaintDTO> getComplaint(@PathVariable Long id) {
 		try {
-			ComplaintDTO complaintDTO = service.getComplaintById(id);
+			ComplaintDTO complaintDTO = complaintService.getComplaintById(id);
 			return ResponseEntity.ok(complaintDTO);
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -170,7 +170,7 @@ public class ComplaintController {
 	@Operation(description = "Get Complaints By Status")
 	@GetMapping("/status/{status}")
 	public ResponseEntity<List<ComplaintDTO>> getComplaintsByStatus(@PathVariable String status) {
-		List<ComplaintDTO> complaints = service.getComplaintsByStatus(status);
+		List<ComplaintDTO> complaints = complaintService.getComplaintsByStatus(status);
 		return ResponseEntity.ok(complaints);
 	}
 
@@ -179,7 +179,7 @@ public class ComplaintController {
 	@DeleteMapping("/{complaintId}")
 	public ResponseEntity<ApiResponse> deleteComplaint(@PathVariable Long complaintId) {
 		try {
-			ApiResponse response = service.deleteComplaintById(complaintId);
+			ApiResponse response = complaintService.deleteComplaintById(complaintId);
 			return ResponseEntity.ok(response);
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage()));
@@ -190,7 +190,7 @@ public class ComplaintController {
 	@Operation(description = "Get All Complaints")
 	@GetMapping("/")
 	public ResponseEntity<List<ComplainToBeSHownOnFeedDTO>> getAllComplaints() {
-		List<ComplainToBeSHownOnFeedDTO> complaints = service.getAllComplaints();
+		List<ComplainToBeSHownOnFeedDTO> complaints = complaintService.getAllComplaints();
 		return ResponseEntity.ok(complaints);
 	}
 }

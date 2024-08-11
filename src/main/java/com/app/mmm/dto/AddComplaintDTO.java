@@ -3,6 +3,8 @@ package com.app.mmm.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,5 +23,5 @@ public class AddComplaintDTO {
     @NotBlank
     private String location;
     
-    private String imagePath;
+    private MultipartFile image;
 }

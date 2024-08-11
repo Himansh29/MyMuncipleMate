@@ -10,9 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
@@ -41,7 +40,9 @@ public class Complaint extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
     
-    private String imagePath;
+    @Lob
+    @Column(name = "imagedata",length = 1000)
+    private byte[] imageData;
     
     @Column(nullable = false)
     private int likes;

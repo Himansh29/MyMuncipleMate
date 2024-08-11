@@ -3,9 +3,8 @@ package com.app.mmm.serviceimple;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.util.Base64;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -53,49 +52,48 @@ public class ComplaintServiceImple implements ComplaintService {
 		}
 	}
 
-	public String handleFileUpload(MultipartFile file) throws RuntimeException {
-	    if (file != null && !file.isEmpty()) {
-	        try {
-	            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-	            Path targetLocation = fileStorageLocation.resolve(fileName);
-
-	            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-	            return fileName; 
-	        } catch (Exception ex) {
-	            throw new RuntimeException("Could not store file", ex);
-	        }
-	    }
-	    return null;
-	}
-
-
 	@Override
-	public ApiResponse addComplaint(MultipartFile file, AddComplaintDTO complaintDTO, String email, ComplaintType complaintType)
-	        throws ResourceNotFoundException {
-	    Citizen citizen = citizenRepository.findByEmail(email)
-	            .orElseThrow(() -> new ResourceNotFoundException("Citizen with email " + email + " not found"));
+	public ApiResponse addComplaint(MultipartFile file, AddComplaintDTO complaintDTO, String email,
+			ComplaintType complaintType) throws ResourceNotFoundException {
 
-	    Complaint complaint = mapper.map(complaintDTO, Complaint.class);
-	    complaint.setComplaintType(complaintType);
-	    complaint.setStatus(Status.OPEN);
-	    complaint.setCitizen(citizen);
+		Citizen citizen = citizenRepository.findByEmail(email)
+				.orElseThrow(() -> new ResourceNotFoundException("Citizen with email " + email + " not found"));
 
-	    if (file != null) {
-	        String filePath = handleFileUpload(file);
-	        complaint.setImagePath(filePath);
+		Complaint complaint = mapper.map(complaintDTO, Complaint.class);
+		complaint.setComplaintType(complaintType);
+		complaint.setStatus(Status.OPEN);
+		complaint.setCitizen(citizen);
+
+		if (file != null && !file.isEmpty()) {
+			try {
+				byte[] imageData = file.getBytes();
+				complaint.setImageData(imageData);
+				System.out.println("File uploaded successfully: " + file.getOriginalFilename());
+			} catch (Exception ex) {
+				throw new RuntimeException("Could not store file", ex);
+			}
+		}else {
+	        System.out.println("No file was uploaded or the file is empty"); 
 	    }
 
-	    complaintRepository.save(complaint);
+		complaintRepository.save(complaint);
 
-	    return new ApiResponse("Complaint added successfully");
+		return new ApiResponse("Complaint added successfully");
 	}
-
 
 	@Override
 	public ComplaintDTO getComplaintById(Long id) {
-		Complaint complaint = complaintRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Complaint Id not found"));
-		return mapper.map(complaint, ComplaintDTO.class);
+	    Complaint complaint = complaintRepository.findById(id)
+	            .orElseThrow(() -> new ResourceNotFoundException("Complaint Id not found"));
+
+	    ComplaintDTO complaintDTO = mapper.map(complaint, ComplaintDTO.class);
+
+	    if (complaint.getImageData() != null) {
+	        String base64Image = Base64.getEncoder().encodeToString(complaint.getImageData());
+	        complaintDTO.setImageData(base64Image); 
+	    }
+
+	    return complaintDTO;
 	}
 
 	@Override
@@ -151,4 +149,5 @@ public class ComplaintServiceImple implements ComplaintService {
 			return new ApiResponse(e.getMessage());
 		}
 	}
+
 }

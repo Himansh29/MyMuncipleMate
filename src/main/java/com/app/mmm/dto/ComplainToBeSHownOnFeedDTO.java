@@ -14,7 +14,7 @@ import lombok.Setter;
 public class ComplainToBeSHownOnFeedDTO {
 
 	private int likes;
-	private String imagePath;
+	private byte[] imageData;
 	private String location;
 	private Status status;
 }

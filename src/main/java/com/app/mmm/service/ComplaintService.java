@@ -13,7 +13,8 @@ import com.app.mmm.exception.ResourceNotFoundException;
 
 public interface ComplaintService {
 
-	ApiResponse addComplaint(MultipartFile file, AddComplaintDTO complaintDTO, String email, ComplaintType complaintType) throws ResourceNotFoundException;
+	ApiResponse addComplaint(MultipartFile file, AddComplaintDTO complaintDTO, String email,
+			ComplaintType complaintType) throws ResourceNotFoundException;
     ComplaintDTO getComplaintById(Long id); 
     ApiResponse deleteComplaintById(Long id);
     List<ComplainToBeSHownOnFeedDTO> getAllComplaints();
@@ -21,5 +22,4 @@ public interface ComplaintService {
 	ApiResponse changeStatus(Long id, String status); 
 	ApiResponse markComplaintAsResolved(Long id);
     ApiResponse markComplaintAsOpen(Long id);
-    String handleFileUpload(MultipartFile file) throws RuntimeException;
 }
