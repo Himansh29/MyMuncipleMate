@@ -73,8 +73,8 @@ public class ComplaintServiceImple implements ComplaintService {
 	@Override
 	public List<ComplaintDTO> getComplaintsByStatus(String status) {
 		Status complaintStatus = Status.valueOf(status.toUpperCase());
-		List<Complaint> complaints = complaintRepository.findByStatus(complaintStatus);
-		return complaints.stream().map(complaint -> mapper.map(complaint, ComplaintDTO.class))
+		List<Complaint> complaintDTO = complaintRepository.findByStatus(complaintStatus);
+		return complaintDTO.stream().map(dto -> mapper.map(dto, ComplaintDTO.class))
 				.collect(Collectors.toList());
 	}
 	

@@ -80,6 +80,17 @@ public class Citizen extends BaseEntity {
 		feedback.setCitizen(this);
 	}
 	
+	public Citizen(Citizen citizen) {
+		super();
+		this.firstName = citizen.getFirstName();
+		this.lastName = citizen.getLastName();
+		this.username = citizen.getUsername();
+		this.email = citizen.getEmail();
+		this.password = citizen.getPassword();
+		this.complaints = citizen.getComplaints();
+		this.feedbacks = citizen.getFeedbacks();
+	}
+	
 //	public void addRole(Role role) {
 //        roles.add(role);
 //        role.getCitizens().add(this);

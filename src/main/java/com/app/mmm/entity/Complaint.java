@@ -11,7 +11,10 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
 
 import com.app.mmm.enums.ComplaintType;
 import com.app.mmm.enums.Status;
@@ -32,6 +35,7 @@ public class Complaint extends BaseEntity {
     private ComplaintType complaintType;
 
     @Column(length = 200, nullable = false)
+    @NotBlank
     private String complaintDescription;
 
     @Enumerated(EnumType.STRING)
@@ -42,6 +46,7 @@ public class Complaint extends BaseEntity {
     @Column(nullable = false)
     private int likes;
     
+    @NotBlank
     @Column(nullable = false)
     private String location;
 

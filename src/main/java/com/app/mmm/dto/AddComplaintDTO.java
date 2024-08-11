@@ -1,9 +1,7 @@
 package com.app.mmm.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
-import com.app.mmm.entity.ComplaintType;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +18,7 @@ public class AddComplaintDTO {
     private String complaintDescription;
 
     @NotEmpty(message = "Location must not be empty")
+    @NotBlank
     private String location;
     
     private String imagePath;
