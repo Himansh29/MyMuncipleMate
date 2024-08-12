@@ -50,7 +50,7 @@ public class SpringSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
             .authorizeHttpRequests(authorize -> {
-                authorize.antMatchers(HttpMethod.POST, "/api/auth/**").permitAll();
+                authorize.antMatchers(HttpMethod.OPTIONS, "/api/auth/**").permitAll();
                 authorize.antMatchers("/api/admin/**").hasRole("ADMIN");
                 authorize.antMatchers("/api/teams/**").hasRole("ADMIN");
                 authorize.antMatchers("/api/citizens/**").authenticated();
