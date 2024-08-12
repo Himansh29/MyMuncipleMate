@@ -1,6 +1,7 @@
 package com.app.mmm.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,11 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.mmm.dto.ApiResponse;
+import com.app.mmm.dto.ComplainToBeSHownOnFeedDTO;
 import com.app.mmm.dto.RegisterDTO;
 import com.app.mmm.dto.SignInDTO;
 import com.app.mmm.dto.VerifyOtpDTO;
 import com.app.mmm.security.JwtAuthResponse;
 import com.app.mmm.service.AuthenticationService;
+import com.app.mmm.service.ComplaintService;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -30,6 +33,9 @@ public class AuthenticationController {
 
     @Autowired
     private AuthenticationService authenticationService;
+    
+    @Autowired
+    private ComplaintService complaintService;
 
     @Operation(description = "Sign in")
     @PostMapping("/signin")
@@ -82,5 +88,12 @@ public class AuthenticationController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ApiResponse("Google login failed"));
     }
+    
+	@Operation(description = "Get All Complaints")
+	@GetMapping("/complaints")
+	public ResponseEntity<List<ComplainToBeSHownOnFeedDTO>> getAllComplaints() {
+		List<ComplainToBeSHownOnFeedDTO> complaints = complaintService.getAllComplaints();
+		return ResponseEntity.ok(complaints);
+	}
 }
 
