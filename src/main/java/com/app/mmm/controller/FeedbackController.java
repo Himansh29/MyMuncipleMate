@@ -31,8 +31,8 @@ public class FeedbackController {
     private FeedbackService feedbackService;
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
-    @PostMapping("/{complaintId}/{citizenId}")
-    public ResponseEntity<?> addFeedback(@PathVariable Long complaintId, @PathVariable Long citizenId,
+    @PostMapping("/{email}")
+    public ResponseEntity<?> addFeedback(@PathVariable String email,
                                          @RequestBody FeedbackDTO feedbackdto) {
         try {
             Feedback feedback = new Feedback();
@@ -41,7 +41,7 @@ public class FeedbackController {
 
             FeedbackDTO dto = mapper.map(feedback, FeedbackDTO.class);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(feedbackService.addFeedback(complaintId, citizenId, dto));
+            return ResponseEntity.status(HttpStatus.CREATED).body(feedbackService.addFeedback(email, dto));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

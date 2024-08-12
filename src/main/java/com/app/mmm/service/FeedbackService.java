@@ -9,7 +9,7 @@ import com.app.mmm.entity.Feedback;
 
 public interface FeedbackService {
 
-	ApiResponse addFeedback(Long citizenId,Long complaintId, FeedbackDTO dto);
+	ApiResponse addFeedback(String citizenEmail, FeedbackDTO dto);
 	FeedbackDTO getFeedbackById(Long id);
 	ApiResponse removeFeedbackById(Long id);
 	List<FeedbackDTO> getAllFeedbackOnAComplaint(Long complaintId);

@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.lang.Nullable;
+
 import com.app.mmm.enums.ComplaintType;
 import com.app.mmm.enums.Status;
 
@@ -54,6 +56,7 @@ public class Complaint extends BaseEntity {
     private Citizen citizen;
 
     @OneToMany(mappedBy = "complaint", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Nullable
     private List<Feedback> feedbacks = new ArrayList<>();
 	
     @ManyToOne

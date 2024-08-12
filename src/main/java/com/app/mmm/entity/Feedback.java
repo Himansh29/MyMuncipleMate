@@ -4,6 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.lang.Nullable;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +22,7 @@ public class Feedback extends BaseEntity {
 
 	@ManyToOne
     @JoinColumn(name = "complaint_id", nullable = false)
+	@Nullable
     private Complaint complaint;
 
     @ManyToOne

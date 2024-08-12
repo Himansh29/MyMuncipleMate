@@ -1,5 +1,6 @@
 package com.app.mmm.dto;
 
+import com.app.mmm.enums.ComplaintType;
 import com.app.mmm.enums.Status;
 
 import lombok.AllArgsConstructor;
@@ -10,17 +11,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class ComplainToBeSHownOnFeedDTO {
 
 	private byte[] imageData;
 	private String location;
 	private Status status;
-	private String pname;
-
-	public ComplainToBeSHownOnFeedDTO(byte[] imageData, String location, Status status, String pname) {
-		this.imageData = imageData;
-		this.location = location;
-		this.status = status;
-		this.pname = pname;
-	}
+	private String username;
+	private String complaintDescription;
+	private ComplaintType complaintType;
 }

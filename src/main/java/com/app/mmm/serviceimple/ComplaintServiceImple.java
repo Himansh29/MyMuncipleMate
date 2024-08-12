@@ -106,7 +106,7 @@ public class ComplaintServiceImple implements ComplaintService {
 
 	@Override
 	public List<ComplainToBeSHownOnFeedDTO> getAllComplaints() {
-		return complaintRepository.findAllComplaintsWithUsername().stream()
+		return complaintRepository.findAllComplaintsWithDetails().stream()
 				.map(complaint -> mapper.map(complaint, ComplainToBeSHownOnFeedDTO.class)).collect(Collectors.toList());
 	}
 

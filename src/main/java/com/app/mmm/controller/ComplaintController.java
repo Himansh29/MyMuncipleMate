@@ -186,7 +186,6 @@ public class ComplaintController {
 		}
 	}
 
-	@PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
 	@Operation(description = "Get All Complaints")
 	@GetMapping("/")
 	public ResponseEntity<List<ComplainToBeSHownOnFeedDTO>> getAllComplaints() {

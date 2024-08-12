@@ -40,22 +40,17 @@ public class FeedbackServiceImple implements FeedbackService {
 	private CitizenRepository citizenRepository;
 
 	@Override
-	public ApiResponse addFeedback(Long complaintId, Long citizenId, FeedbackDTO feedbackDTO)
+	public ApiResponse addFeedback(String email, FeedbackDTO feedbackDTO)
 			throws ResourceNotFoundException {
-		Complaint complaint = complaintRepository.findById(complaintId)
-				.orElseThrow(() -> new ResourceNotFoundException("Complaint ID NOT FOUND"));
-
-		Citizen citizen = citizenRepository.findById(citizenId)
+		Citizen citizen = citizenRepository.findByEmail(email)
 				.orElseThrow(() -> new ResourceNotFoundException("Citizen ID NOT FOUND"));
 
 		Feedback feedback = new Feedback();
 
 		feedback.setRating(feedbackDTO.getRating());
 		feedback.setComment(feedbackDTO.getComment());
-		feedback.setComplaint(complaint);
 		feedback.setCitizen(citizen);
 
-		complaint.addFeedback(feedback);
 		citizen.addFeedback(feedback);
 
 		feedbackRepository.save(feedback);
