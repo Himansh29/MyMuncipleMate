@@ -43,9 +43,7 @@ public class Complaint extends BaseEntity {
     @Lob
     @Column(name = "imagedata",length = 1000)
     private byte[] imageData;
-    
-    @Column(nullable = false)
-    private int likes;
+
     
     @NotBlank
     @Column(nullable = false)
@@ -71,16 +69,6 @@ public class Complaint extends BaseEntity {
 		feedbacks.remove(feedback);
 		feedback.setComplaint(null);
 	}
-	
-    public void incrementLikes() {
-        this.likes++;
-    }
-
-    public void decrementLikes() {
-        if (this.likes > 0) {
-            this.likes--;
-        }
-    }
 
 	public void setStatus(Status status) {
         this.status = status;
