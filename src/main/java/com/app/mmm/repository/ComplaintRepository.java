@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.app.mmm.dto.ComplainToBeSHownOnFeedDTO;
 import com.app.mmm.dto.ComplaintDTO;
+import com.app.mmm.dto.ComplaintToBeShownOnAdminFeed;
 import com.app.mmm.entity.Complaint;
 import com.app.mmm.enums.Status;
 
@@ -24,4 +25,12 @@ public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
 		       "FROM Complaint c " +
 		       "JOIN c.citizen ci")
 	    List<ComplainToBeSHownOnFeedDTO> findAllComplaintsWithDetails();
+	
+	@Query("SELECT new com.app.mmm.dto.ComplaintToBeShownOnAdminFeed(" +
+	           "c.id, c.imageData, c.location, c.status, ci.username, " +
+	           "c.complaintDescription, c.complaintType) " +
+	           "FROM Complaint c " +
+	           "JOIN c.citizen ci")
+	    List<ComplaintToBeShownOnAdminFeed> findAllComplaintsWithIdForAdminFeed();
+	
 }

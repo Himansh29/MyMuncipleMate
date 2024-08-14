@@ -1,6 +1,10 @@
 package com.app.mmm.controller;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -192,4 +196,10 @@ public class ComplaintController {
 		List<ComplainToBeSHownOnFeedDTO> complaints = complaintService.getAllComplaints();
 		return ResponseEntity.ok(complaints);
 	}
+	
+	@GetMapping()
+    public void redirectToGoogleLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String redirectUrl = "/oauth2/authorization/google";
+        response.sendRedirect(redirectUrl);
+    }
 }

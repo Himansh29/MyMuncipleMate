@@ -1,6 +1,5 @@
 package com.app.mmm.controller;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,25 +71,11 @@ public class AuthenticationController {
         authResponse.setAccessToken(token);
         return ResponseEntity.status(HttpStatus.OK).body(authResponse);
     }
-    
-    @Operation(description = "Google Login Success")
-    @GetMapping("/login")
-    public String googleLoginSuccess(Principal principal) {
 
-    	return "Hi " + principal.getName() + " Welcome to Oauth2";
-        
-    }
-
-
-    @Operation(description = "Google Login Failure")
-    @GetMapping("/google-login-failure")
-    public ResponseEntity<?> googleLoginFailure() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ApiResponse("Google login failed"));
-    }
+    // http://localhost:8081/oauth2/authorization/google
     
 	@Operation(description = "Get All Complaints")
-	@GetMapping("/complaints")
+	@GetMapping("")
 	public ResponseEntity<List<ComplainToBeSHownOnFeedDTO>> getAllComplaints() {
 		List<ComplainToBeSHownOnFeedDTO> complaints = complaintService.getAllComplaints();
 		return ResponseEntity.ok(complaints);

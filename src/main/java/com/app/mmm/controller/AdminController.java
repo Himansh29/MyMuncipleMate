@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.app.mmm.dto.ApiResponse;
 import com.app.mmm.dto.CitizenSummaryDto;
 import com.app.mmm.dto.ComplainToBeSHownOnFeedDTO;
+import com.app.mmm.dto.ComplaintToBeShownOnAdminFeed;
 import com.app.mmm.dto.RoleAssignmentDTO;
 import com.app.mmm.service.CitizenService;
 import com.app.mmm.service.ComplaintService;
@@ -52,8 +53,8 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(description = "Get All Complaints")
     @GetMapping("/complaints")
-    public ResponseEntity<List<ComplainToBeSHownOnFeedDTO>> getAllComplaints() {
-        List<ComplainToBeSHownOnFeedDTO> complaints = complaintService.getAllComplaints();
+    public ResponseEntity<List<ComplaintToBeShownOnAdminFeed>> getAllComplaints() {
+        List<ComplaintToBeShownOnAdminFeed> complaints = complaintService.getAllComplaintsForAdmin();
         return ResponseEntity.status(HttpStatus.OK).body(complaints);
     }
 
@@ -100,8 +101,6 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-    
-    
 }
 
 

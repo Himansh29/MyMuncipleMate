@@ -19,6 +19,7 @@ import com.app.mmm.dto.AddComplaintDTO;
 import com.app.mmm.dto.ApiResponse;
 import com.app.mmm.dto.ComplainToBeSHownOnFeedDTO;
 import com.app.mmm.dto.ComplaintDTO;
+import com.app.mmm.dto.ComplaintToBeShownOnAdminFeed;
 import com.app.mmm.entity.Citizen;
 import com.app.mmm.entity.Complaint;
 import com.app.mmm.enums.ComplaintType;
@@ -104,11 +105,6 @@ public class ComplaintServiceImple implements ComplaintService {
 		return new ApiResponse("Complaint Deleted with id: " + id);
 	}
 
-	@Override
-	public List<ComplainToBeSHownOnFeedDTO> getAllComplaints() {
-		return complaintRepository.findAllComplaintsWithDetails().stream()
-				.map(complaint -> mapper.map(complaint, ComplainToBeSHownOnFeedDTO.class)).collect(Collectors.toList());
-	}
 
 	@Override
 	public List<ComplaintDTO> getComplaintsByStatus(String status) {
@@ -149,5 +145,16 @@ public class ComplaintServiceImple implements ComplaintService {
 			return new ApiResponse(e.getMessage());
 		}
 	}
+
+	@Override
+	public List<ComplainToBeSHownOnFeedDTO> getAllComplaints() {
+		return complaintRepository.findAllComplaintsWithDetails().stream()
+				.map(complaint -> mapper.map(complaint, ComplainToBeSHownOnFeedDTO.class)).collect(Collectors.toList());
+	}
+	@Override
+    public List<ComplaintToBeShownOnAdminFeed> getAllComplaintsForAdmin() {
+        return complaintRepository.findAllComplaintsWithIdForAdminFeed().stream()
+                .collect(Collectors.toList());
+    }
 
 }

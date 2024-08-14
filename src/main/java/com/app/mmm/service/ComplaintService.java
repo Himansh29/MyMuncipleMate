@@ -8,6 +8,7 @@ import com.app.mmm.dto.AddComplaintDTO;
 import com.app.mmm.dto.ApiResponse;
 import com.app.mmm.dto.ComplainToBeSHownOnFeedDTO;
 import com.app.mmm.dto.ComplaintDTO;
+import com.app.mmm.dto.ComplaintToBeShownOnAdminFeed;
 import com.app.mmm.enums.ComplaintType;
 import com.app.mmm.exception.ResourceNotFoundException;
 
@@ -18,6 +19,7 @@ public interface ComplaintService {
     ComplaintDTO getComplaintById(Long id); 
     ApiResponse deleteComplaintById(Long id);
     List<ComplainToBeSHownOnFeedDTO> getAllComplaints();
+    List<ComplaintToBeShownOnAdminFeed> getAllComplaintsForAdmin();
     List<ComplaintDTO> getComplaintsByStatus(String status);
 	ApiResponse changeStatus(Long id, String status); 
 	ApiResponse markComplaintAsResolved(Long id);
