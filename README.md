@@ -1,60 +1,56 @@
-# MyMunicipalMate Backend
+# MyMunicipalMate
 
-Welcome to the MyMunicipalMate backend! This backend service handles authentication, role management, citizen services, complaints, feedback, and team management.
+![MyMunicipalMate Logo](your-logo-url-here)
+
+**MyMunicipalMate** is a robust municipal management system aimed at enhancing communication between citizens and municipal authorities. This project provides a platform for citizens to report various civic issues, submit feedback, and allows authorities to efficiently manage and address these complaints.
 
 ## Table of Contents
 
-1. [Features](#features)
-2. [Technologies](#technologies)
-3. [Getting Started](#getting-started)
-   - [Prerequisites](#prerequisites)
-   - [Installation](#installation)
-   - [Configuration](#configuration)
-4. [API Endpoints](#api-endpoints)
-   - [Authentication](#authentication)
-   - [Admin](#admin)
-   - [Citizen](#citizen)
-   - [Complaint](#complaint)
-   - [Feedback](#feedback)
-   - [Team](#team)
-5. [Running Tests](#running-tests)
-6. [Contributing](#contributing)
-7. [License](#license)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [Technologies Used](#technologies-used)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Features
 
-- **Authentication**: Secure login and JWT-based authentication.
-- **Role Management**: Admins can assign and remove roles.
-- **Citizen Management**: CRUD operations for citizen details.
-- **Complaint Management**: Create, update, and retrieve complaints.
-- **Feedback Management**: Create, retrieve, and delete feedback.
-- **Team Management**: Admins can manage teams.
+- **Citizen Management:** Users can sign up, log in, and manage their profiles.
+- **Complaint Submission:** Citizens can report issues related to garbage management, water supply, electricity management, and road repair.
+- **Feedback System:** Allows citizens to provide feedback to municipal authorities.
+- **Team Management:** Admins can create teams, assign them to complaints, and manage their activities.
+- **Google OAuth2 Login:** Users can log in using their Google accounts for quick access.
+- **Role-based Access Control:** Secure endpoints with role-based authorization for both citizens and administrators.
+- **JWT Authentication:** Secure API interactions with JWT tokens.
+- **Multipart File Upload:** Support for uploading images related to complaints.
 
-## Technologies
+## Architecture
 
-- **Spring Boot**: Framework for building Java-based backend applications.
-- **Spring Security**: For authentication and authorization.
-- **JWT**: For secure token-based authentication.
-- **Hibernate**: ORM for database operations.
-- **MySQL**: relational database management system (RDBMS) for development and testing.
-- **Lombok**: To reduce boilerplate code.
+The project is structured as a Spring Boot application with a layered architecture:
 
-## Getting Started
+- **Controllers:** Handle incoming HTTP requests and map them to the appropriate service methods.
+- **Services:** Contain business logic and interact with repositories to fetch or persist data.
+- **Repositories:** Interface with the database using JPA to perform CRUD operations.
+- **Security:** JWT-based authentication and role-based authorization using Spring Security.
+
+## Installation
 
 ### Prerequisites
 
-Ensure you have the following installed:
+- Java 17+
+- Maven 3.6+
+- MySQL Database
+- Node.js (for frontend, if applicable)
 
-- **Java 17 or later**
-- **Maven**
-- **Postman** (for testing API endpoints)
-
-### Installation
+### Steps
 
 1. **Clone the repository:**
-
    ```bash
-   git clone https://github.com/yourusername/MyMuncipleMateDummy.git
+   git clone https://github.com/Himansh29/MyMuncipleMate.git
+   cd MyMuncipleMate
+
 ## Table of Contents
 
 - [Authentication](#authentication)
