@@ -60,7 +60,7 @@ The project is structured as a Spring Boot application with a layered architectu
 - [Feedback Endpoints](#feedback-endpoints)
 - [Team Endpoints](#team-endpoints)
 
-## Authentication
+## Authentication Endpoints
 
 ### Sign In
 - **Endpoint:** `POST /api/auth/signin`
@@ -92,16 +92,6 @@ The project is structured as a Spring Boot application with a layered architectu
 - **Response:** `JwtAuthResponse`
 - **Description:** Authenticates an admin user and returns a JWT token.
 
-### Google Login Success
-- **Endpoint:** `GET /api/auth/login`
-- **Response:** `String`
-- **Description:** Confirms successful login via Google OAuth2.
-
-### Google Login Failure
-- **Endpoint:** `GET /api/auth/google-login-failure`
-- **Response:** `ApiResponse`
-- **Description:** Returns a failure response if Google OAuth2 login fails.
-
 ## Admin Endpoints
 
 ### Add Role to Citizen
@@ -112,7 +102,7 @@ The project is structured as a Spring Boot application with a layered architectu
 
 ### Get All Complaints
 - **Endpoint:** `GET /api/admin/complaints`
-- **Response:** `List<ComplainToBeSHownOnFeedDTO>`
+- **Response:** `List<ComplaintToBeShownOnAdminFeed>`
 - **Description:** Retrieves all complaints.
 
 ### Get All Citizens
@@ -123,20 +113,8 @@ The project is structured as a Spring Boot application with a layered architectu
 ### Mark Complaint as Resolved
 - **Endpoint:** `PATCH /api/admin/complaints/{complaintID}/resolved`
 - **Path Variable:** `complaintID`
-- **Response:** `String`
+- **Response:** `ApiResponse`
 - **Description:** Marks a complaint as resolved.
-
-### Mark Complaint as Open
-- **Endpoint:** `PATCH /api/admin/complaints/{complaintID}/open`
-- **Path Variable:** `complaintID`
-- **Response:** `String`
-- **Description:** Marks a complaint as open.
-
-### Assign Team to Complaint
-- **Endpoint:** `PUT /api/admin/assign-team/{complaintId}`
-- **Path Variable:** `complaintId`
-- **Response:** `String`
-- **Description:** Assigns a team to a complaint.
 
 ## Citizen Endpoints
 
@@ -273,5 +251,6 @@ The project is structured as a Spring Boot application with a layered architectu
 ### Delete Team
 - **Endpoint:** `DELETE /api/teams/{id}`
 - **Path Variable:** `id`
-- **Response:** `Void`
+- **Response:** `ApiResponse`
 - **Description:** Deletes a team by its ID.
+
