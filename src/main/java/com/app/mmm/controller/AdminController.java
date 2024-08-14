@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.mmm.dto.ApiResponse;
 import com.app.mmm.dto.CitizenSummaryDto;
-import com.app.mmm.dto.ComplainToBeSHownOnFeedDTO;
 import com.app.mmm.dto.ComplaintToBeShownOnAdminFeed;
 import com.app.mmm.dto.RoleAssignmentDTO;
 import com.app.mmm.service.CitizenService;

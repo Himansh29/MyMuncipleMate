@@ -2,8 +2,6 @@ package com.app.mmm.dto;
 
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.app.mmm.enums.ComplaintType;
 import com.app.mmm.enums.Status;
 
