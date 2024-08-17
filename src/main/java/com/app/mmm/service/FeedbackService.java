@@ -14,4 +14,5 @@ public interface FeedbackService {
 	ApiResponse removeFeedbackById(Long id);
 	List<FeedbackDTO> getAllFeedbackOnAComplaint(Long complaintId);
 	List<FeedbackDTO> getAllFeedbackPostedBySingleCitizen(Long citizenId);
+	List<FeedbackDTO> getFeedbacks();
 }

@@ -55,20 +55,28 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             citizen.setLastName(getLastNameFromOAuth2Token(token));
             citizen.setEmail(email);
             
-            Set<Role> roles = new HashSet<>();
+            System.out.println("Fetching role...");
             Role citizenRole = roleRepository.findByName("ROLE_CITIZEN")
                     .orElseThrow(() -> new ResourceNotFoundException("ROLE NOT FOUND"));
+            System.out.println("Role found: " + citizenRole.getName());
+
+            Set<Role> roles = new HashSet<>();
             roles.add(citizenRole);
             citizen.setRoles(roles);
+
+            System.out.println("Roles assigned to citizen: " + citizen.getRoles());
+
             citizenRepository.save(citizen);
-            System.out.println("New user registered: " + email);
+
+            System.out.println("Citizen saved successfully");
+
         }
 
         String jwtToken = jwtTokenProvider.generateToken(authentication);
 
         Cookie cookie = new Cookie("jwtToken", jwtToken);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true); 
+        cookie.setHttpOnly(false);
+        cookie.setSecure(false); 
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60); 
         

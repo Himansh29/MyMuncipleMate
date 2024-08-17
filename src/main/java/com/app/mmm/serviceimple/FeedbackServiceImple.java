@@ -107,6 +107,11 @@ public class FeedbackServiceImple implements FeedbackService {
 		
 		return citizen.getFeedbacks().stream().map(feedback -> mapper.map(feedback, FeedbackDTO.class)).collect(Collectors.toList());
 	}
+
+	@Override
+	public List<FeedbackDTO> getFeedbacks() {
+		return feedbackRepository.findAll().stream().map(feedback -> mapper.map(feedback, FeedbackDTO.class)).collect(Collectors.toList());
+	}
 	
 	
 

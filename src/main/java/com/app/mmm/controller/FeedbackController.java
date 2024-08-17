@@ -29,6 +29,12 @@ public class FeedbackController {
 
     @Autowired
     private FeedbackService feedbackService;
+    
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
+    @GetMapping("/")
+    public ResponseEntity<?> getFeedbacks() {
+    	return ResponseEntity.ok(feedbackService.getFeedbacks());
+    }
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('CITIZEN')")
     @PostMapping("/{email}")
