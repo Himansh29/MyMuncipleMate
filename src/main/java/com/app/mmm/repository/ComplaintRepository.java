@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
 
 import com.app.mmm.dto.ComplainToBeSHownOnFeedDTO;
-import com.app.mmm.dto.ComplaintDTO;
 import com.app.mmm.dto.ComplaintToBeShownOnAdminFeed;
 import com.app.mmm.entity.Complaint;
 import com.app.mmm.enums.Status;

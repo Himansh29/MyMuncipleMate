@@ -26,65 +26,57 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SpringSecurityConfig {
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+	@Autowired
+	private UserDetailsService userDetailsService;
 
-    @Autowired
-    private JwtAuthenticationEntryPoint authenticationEntryPoint;
+	@Autowired
+	private JwtAuthenticationEntryPoint authenticationEntryPoint;
 
-    @Autowired
-    private JwtAuthenticationFilter authenticationFilter;
+	@Autowired
+	private JwtAuthenticationFilter authenticationFilter;
 
-    @Autowired
-    private OAuth2SuccessHandler oAuth2SuccessHandler;
+	@Autowired
+	private OAuth2SuccessHandler oAuth2SuccessHandler;
 
-    @Bean
-    private static PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	private static PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Autowired
-    private CustomUserDetailService customUserDetailService;
+	@Autowired
+	private CustomUserDetailService customUserDetailService;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-            .authorizeHttpRequests(authorize -> {
-                authorize.antMatchers(HttpMethod.POST, "/api/auth/**").permitAll();
-                authorize.antMatchers(HttpMethod.GET, "/api/auth/**").permitAll();
-                authorize.antMatchers(HttpMethod.GET, "/api/complaints/**").permitAll();
-                authorize.antMatchers("/api/auth/login", "/oauth2/**").permitAll();
-                authorize.antMatchers("/api/admin/**").hasRole("ADMIN");
-                authorize.antMatchers("/api/teams/**").hasRole("ADMIN");
-                authorize.antMatchers("/api/citizens/**").authenticated();
-                authorize.antMatchers("/api/complaints/**").authenticated();
-                authorize.antMatchers("/api/feedback/**").authenticated();
-                authorize.anyRequest().authenticated();
-            })
-            .oauth2Login()
-                .loginPage("/api/auth/login")
-                .defaultSuccessUrl("/api/complaints/")
-                .failureUrl("/api/auth/login?error=true")
-                .successHandler(oAuth2SuccessHandler) 
-            .and()
-            .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint)
-            .and()
-            .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .cors(cors -> cors.configurationSource(request -> {
-                CorsConfiguration corsConfiguration = new CorsConfiguration();
-                corsConfiguration.addAllowedOrigin("http://localhost:3000");
-                corsConfiguration.addAllowedMethod("*");
-                corsConfiguration.addAllowedHeader("*");
-                corsConfiguration.setAllowCredentials(true);
-                return corsConfiguration;
-            }));
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.cors().and().csrf().disable().authorizeHttpRequests(authorize -> {
+			authorize.antMatchers(HttpMethod.POST, "/api/auth/**").permitAll();
+			authorize.antMatchers(HttpMethod.GET, "/api/auth/**").permitAll();
+			authorize.antMatchers(HttpMethod.GET, "/api/complaints/**").permitAll();
+			authorize.antMatchers("/api/auth/login", "/oauth2/**").permitAll();
+			authorize.antMatchers("/api/admin/**").hasRole("ADMIN");
+			authorize.antMatchers("/api/teams/**").hasRole("ADMIN");
+			authorize.antMatchers("/api/citizens/**").authenticated();
+			authorize.antMatchers("/api/complaints/**").authenticated();
+			authorize.antMatchers("/api/feedback/**").authenticated();
+			authorize.anyRequest().authenticated();
+		}).oauth2Login().loginPage("/api/auth/login").defaultSuccessUrl("/api/complaints/")
+				.failureUrl("/api/auth/login?error=true").successHandler(oAuth2SuccessHandler).and().exceptionHandling()
+				.authenticationEntryPoint(authenticationEntryPoint).and()
+				.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+				.cors(cors -> cors.configurationSource(request -> {
+					CorsConfiguration corsConfiguration = new CorsConfiguration();
+					corsConfiguration.addAllowedOrigin("http://localhost:3000");
+					corsConfiguration.addAllowedMethod("*");
+					corsConfiguration.addAllowedHeader("*");
+					corsConfiguration.setAllowCredentials(true);
+					return corsConfiguration;
+				}));
 
-        return http.build();
-    }
+		return http.build();
+	}
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
-    }
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+		return configuration.getAuthenticationManager();
+	}
 }

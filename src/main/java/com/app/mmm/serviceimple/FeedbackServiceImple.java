@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
 import com.app.mmm.dto.ApiResponse;
-import com.app.mmm.dto.CitizenDto;
-import com.app.mmm.dto.AddComplaintDTO;
 import com.app.mmm.dto.FeedbackDTO;
 import com.app.mmm.entity.Citizen;
 import com.app.mmm.entity.Complaint;
@@ -71,7 +69,6 @@ public class FeedbackServiceImple implements FeedbackService {
 
 	@Override
 	public ApiResponse removeFeedbackById(Long id) {
-		String msg = "Deletion was Unsuccessful";
 		Feedback feedbackToBeDeleted = feedbackRepository.findById(id)
 				.orElseThrow(() -> new ResourceAccessException("ID NOT FOUND"));
 		feedbackRepository.delete(feedbackToBeDeleted);

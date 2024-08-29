@@ -1,9 +1,7 @@
 package com.app.mmm.serviceimple;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.transaction.Transactional;
 
@@ -30,7 +28,6 @@ import com.app.mmm.exception.ResourceNotFoundException;
 import com.app.mmm.repository.CitizenRepository;
 import com.app.mmm.repository.OtpRepository;
 import com.app.mmm.repository.RoleRepository;
-import com.app.mmm.security.JwtAuthResponse;
 import com.app.mmm.security.JwtTokenProvider;
 import com.app.mmm.service.AuthenticationService;
 
@@ -43,7 +40,7 @@ public class AuthenticationServiceImple implements AuthenticationService {
 
 	@Autowired
 	private RoleRepository roleRepository;
-	
+
 	@Autowired
 	private OtpRepository otpRepository;
 
@@ -57,9 +54,7 @@ public class AuthenticationServiceImple implements AuthenticationService {
 	private JwtTokenProvider jwtTokenProvider;
 
 	@Autowired
-    private JavaMailSender mailSender;
-	
-	
+	private JavaMailSender mailSender;
 
 	@Override
 	public String signIn(SignInDTO signInDTO) {
@@ -103,82 +98,76 @@ public class AuthenticationServiceImple implements AuthenticationService {
 		return new ApiResponse("Registration successful");
 	}
 
-	private Map<String, String> otpStorage = new ConcurrentHashMap<>();
+	@Override
+	public ApiResponse sendOtpForPasswordReset(String email) {
+		Citizen citizen = citizenRepository.findByEmail(email)
+				.orElseThrow(() -> new ResourceNotFoundException("Email not found"));
+
+		// Generate 4-digit OTP
+		int otp = (int) (Math.random() * 9000) + 1000;
+
+		// Save OTP in the database linked to the user
+		OTPEntity otpEntity = new OTPEntity(citizen.getEmail(), otp);
+		otpRepository.save(otpEntity);
+
+		// Send OTP via email
+		sendOtpEmail(citizen.getEmail(), otp);
+
+		return new ApiResponse("OTP sent to email successfully");
+	}
 
 	@Override
-    public ApiResponse sendOtpForPasswordReset(String email) {
-        Citizen citizen = citizenRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Email not found"));
+	public ApiResponse verifyOtpAndResetPassword(VerifyOtpDTO verifyOtpDTO) {
+		OTPEntity otpEntity = otpRepository.findByEmailAndOtp(verifyOtpDTO.getEmail(), verifyOtpDTO.getOtp())
+				.orElseThrow(() -> new IllegalArgumentException("Invalid OTP"));
 
-        // Generate 4-digit OTP
-        int otp = (int)(Math.random() * 9000) + 1000;
+		if (!verifyOtpDTO.getNewPassword().equals(verifyOtpDTO.getConfirmPassword())) {
+			throw new IllegalArgumentException("Passwords do not match");
+		}
 
-        // Save OTP in the database linked to the user
-        OTPEntity otpEntity = new OTPEntity(citizen.getEmail(), otp);
-        otpRepository.save(otpEntity);
+		Citizen citizen = citizenRepository.findByEmail(verifyOtpDTO.getEmail())
+				.orElseThrow(() -> new ResourceNotFoundException("Email not found"));
 
-        // Send OTP via email
-        sendOtpEmail(citizen.getEmail(), otp);
+		// Update password
+		citizen.setPassword(encoder.encode(verifyOtpDTO.getNewPassword()));
+		citizenRepository.save(citizen);
 
-        return new ApiResponse("OTP sent to email successfully");
-    }
+		// Remove OTP after successful verification
+		otpRepository.delete(otpEntity);
 
-    @Override
-    public ApiResponse verifyOtpAndResetPassword(VerifyOtpDTO verifyOtpDTO) {
-    	OTPEntity otpEntity = otpRepository.findByEmailAndOtp(verifyOtpDTO.getEmail(), verifyOtpDTO.getOtp())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid OTP"));
+		return new ApiResponse("Password reset successful");
+	}
 
-        if (!verifyOtpDTO.getNewPassword().equals(verifyOtpDTO.getConfirmPassword())) {
-            throw new IllegalArgumentException("Passwords do not match");
-        }
-
-        Citizen citizen = citizenRepository.findByEmail(verifyOtpDTO.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("Email not found"));
-
-        // Update password
-        citizen.setPassword(encoder.encode(verifyOtpDTO.getNewPassword()));
-        citizenRepository.save(citizen);
-
-        // Remove OTP after successful verification
-        otpRepository.delete(otpEntity);
-
-        return new ApiResponse("Password reset successful");
-    }
-
-    private void sendOtpEmail(String toEmail, int otp) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(toEmail);
-        message.setSubject("Password Reset OTP");
-        message.setText("Your OTP for password reset is: " + otp);
-        mailSender.send(message);
-    }
+	private void sendOtpEmail(String toEmail, int otp) {
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(toEmail);
+		message.setSubject("Password Reset OTP");
+		message.setText("Your OTP for password reset is: " + otp);
+		mailSender.send(message);
+	}
 
 	@Override
 	public String adminSignIn(SignInDTO signInDTO) {
 		Authentication authenticate = authenticationManager.authenticate(
-	            new UsernamePasswordAuthenticationToken(signInDTO.getUsernameOrEmail(), signInDTO.getPassword()));
+				new UsernamePasswordAuthenticationToken(signInDTO.getUsernameOrEmail(), signInDTO.getPassword()));
 
 		boolean isAdmin = authenticate.getAuthorities().stream()
-	            .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+				.anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
 
-	    if (!isAdmin) {
-	        throw new IllegalArgumentException("You must be an admin to log in here");
-	    }
+		if (!isAdmin) {
+			throw new IllegalArgumentException("You must be an admin to log in here");
+		}
 
-	    String token = jwtTokenProvider.generateToken(authenticate);
+		String token = jwtTokenProvider.generateToken(authenticate);
 
-	    return token;
+		return token;
 	}
 
 	@Override
 	public String createTokenForOAuth2User(OAuth2User oAuth2User) {
-		Authentication authentication = new UsernamePasswordAuthenticationToken(
-		        oAuth2User, null, oAuth2User.getAuthorities()
-		    );
-		    return jwtTokenProvider.generateToken(authentication);
+		Authentication authentication = new UsernamePasswordAuthenticationToken(oAuth2User, null,
+				oAuth2User.getAuthorities());
+		return jwtTokenProvider.generateToken(authentication);
 	}
-	
-	
-	
 
 }
